@@ -5,10 +5,10 @@ spring:
   application:
     name: bravoTeam-service
   datasource:
-    url: jdbc:mysql://example-1.cxbtixwquuos.ap-northeast-2.rds.amazonaws.com:3306/test
-    username: admin
-    password: q1w2e3r4
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://example-1.cxbtixwquuos.ap-northeast-2.rds.amazonaws.com:3306/test
+#    username: admin
+#    password: q1w2e3r4
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update #create -> update

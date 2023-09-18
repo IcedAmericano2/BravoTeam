@@ -1,6 +1,7 @@
 package com.mju.bravoTeam.domain.service;
 
 import com.mju.bravoTeam.domain.model.Exception.ExceptionList;
+import com.mju.bravoTeam.domain.model.Exception.NonExistentException;
 import com.mju.bravoTeam.domain.model.Result.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,11 @@ public class ExceptionService {
         return responseService.getFailResult(ExceptionList.UNKNOWN.getCode(), ExceptionList.UNKNOWN.getMessage());
     }
 
-//    @ExceptionHandler({FaqBoardNotFindException.class})
-//    protected CommonResult handleCustom(FaqBoardNotFindException e) {
-//        log.error("non exception FAQBoard", e);
-//        ExceptionList exceptionList = e.getExceptionList();
-//        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
-//    }
+    @ExceptionHandler({NonExistentException.class})
+    protected CommonResult handleCustom(NonExistentException e) {
+        log.error("non existent exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
 
 }
