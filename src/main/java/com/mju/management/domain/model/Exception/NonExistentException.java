@@ -1,4 +1,4 @@
-package com.mju.bravoTeam.domain.model.Exception;
+package com.mju.management.domain.model.Exception;
 
 public class NonExistentException extends RuntimeException {
     private final ExceptionList exceptionList;

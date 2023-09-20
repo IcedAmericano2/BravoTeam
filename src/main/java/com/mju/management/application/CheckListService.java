@@ -1,7 +1,7 @@
-package com.mju.bravoTeam.application;
+package com.mju.management.application;
 
-import com.mju.bravoTeam.domain.model.CheckList;
-import com.mju.bravoTeam.presentation.dto.CheckListRegisterDto;
+import com.mju.management.domain.model.CheckList;
+import com.mju.management.presentation.dto.CheckListRegisterDto;
 
 import java.util.List;
 

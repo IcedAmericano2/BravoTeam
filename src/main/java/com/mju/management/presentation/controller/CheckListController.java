@@ -1,10 +1,10 @@
-package com.mju.bravoTeam.presentation.controller;
+package com.mju.management.presentation.controller;
 
-import com.mju.bravoTeam.application.CheckListService;
-import com.mju.bravoTeam.domain.model.CheckList;
-import com.mju.bravoTeam.domain.model.Result.CommonResult;
-import com.mju.bravoTeam.domain.service.ResponseService;
-import com.mju.bravoTeam.presentation.dto.CheckListRegisterDto;
+import com.mju.management.application.CheckListService;
+import com.mju.management.domain.model.CheckList;
+import com.mju.management.domain.model.Result.CommonResult;
+import com.mju.management.domain.service.ResponseService;
+import com.mju.management.presentation.dto.CheckListRegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

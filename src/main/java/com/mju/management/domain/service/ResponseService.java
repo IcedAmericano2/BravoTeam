@@ -1,8 +1,8 @@
-package com.mju.bravoTeam.domain.service;
+package com.mju.management.domain.service;
 
-import com.mju.bravoTeam.domain.model.Result.CommonResult;
-import com.mju.bravoTeam.domain.model.Result.ListResult;
-import com.mju.bravoTeam.domain.model.Result.SingleResult;
+import com.mju.management.domain.model.Result.CommonResult;
+import com.mju.management.domain.model.Result.ListResult;
+import com.mju.management.domain.model.Result.SingleResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;

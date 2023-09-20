@@ -1,4 +1,4 @@
-package com.mju.bravoTeam.domain.model;
+package com.mju.management.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Builder;
