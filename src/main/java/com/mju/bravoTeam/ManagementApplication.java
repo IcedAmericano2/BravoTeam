@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class BravoTeamApplication {
+public class ManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BravoTeamApplication.class, args);
+		SpringApplication.run(ManagementApplication.class, args);
 	}
 
 }

@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: bravoTeam-service
+    name: management-service
   datasource:
 #    url: jdbc:mysql://example-1.cxbtixwquuos.ap-northeast-2.rds.amazonaws.com:3306/test
 #    username: admin
