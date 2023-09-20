@@ -1,4 +1,4 @@
-package com.mju.bravoTeam.domain.model.Result;
+package com.mju.management.domain.model.Result;
 
 import lombok.Getter;
 import lombok.Setter;

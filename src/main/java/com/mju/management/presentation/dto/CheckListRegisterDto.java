@@ -1,4 +1,4 @@
-package com.mju.bravoTeam.presentation.dto;
+package com.mju.management.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

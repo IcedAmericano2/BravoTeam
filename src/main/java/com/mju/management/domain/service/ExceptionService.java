@@ -1,8 +1,8 @@
-package com.mju.bravoTeam.domain.service;
+package com.mju.management.domain.service;
 
-import com.mju.bravoTeam.domain.model.Exception.ExceptionList;
-import com.mju.bravoTeam.domain.model.Exception.NonExistentException;
-import com.mju.bravoTeam.domain.model.Result.CommonResult;
+import com.mju.management.domain.model.Exception.ExceptionList;
+import com.mju.management.domain.model.Exception.NonExistentException;
+import com.mju.management.domain.model.Result.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

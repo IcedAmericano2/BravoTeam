@@ -1,10 +1,10 @@
-package com.mju.bravoTeam.application;
+package com.mju.management.application;
 
-import com.mju.bravoTeam.domain.model.Exception.ExceptionList;
-import com.mju.bravoTeam.domain.model.Exception.NonExistentException;
-import com.mju.bravoTeam.domain.model.CheckList;
-import com.mju.bravoTeam.domain.repository.CheckListRepository;
-import com.mju.bravoTeam.presentation.dto.CheckListRegisterDto;
+import com.mju.management.domain.model.Exception.ExceptionList;
+import com.mju.management.domain.model.Exception.NonExistentException;
+import com.mju.management.domain.model.CheckList;
+import com.mju.management.domain.repository.CheckListRepository;
+import com.mju.management.presentation.dto.CheckListRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
