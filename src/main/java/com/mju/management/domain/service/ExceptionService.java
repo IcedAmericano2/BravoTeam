@@ -1,6 +1,7 @@
 package com.mju.management.domain.service;
 
 import com.mju.management.domain.model.Exception.ExceptionList;
+import com.mju.management.domain.model.Exception.InvalidDateRangeException;
 import com.mju.management.domain.model.Exception.NonExistentException;
 import com.mju.management.domain.model.Result.CommonResult;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,13 @@ public class ExceptionService {
     @ExceptionHandler({NonExistentException.class})
     protected CommonResult handleCustom(NonExistentException e) {
         log.error("non existent exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
+
+    @ExceptionHandler({InvalidDateRangeException.class})
+    protected CommonResult invalidDateRangeException(InvalidDateRangeException e) {
+        log.error("invalid date range exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
