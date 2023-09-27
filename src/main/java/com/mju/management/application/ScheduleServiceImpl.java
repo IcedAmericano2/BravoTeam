@@ -43,11 +43,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional
     public void updateSchedule(Long scheduleIndex, CreateScheduleRequestDto updateScheduleRequestDto) {
         validateDateRange(updateScheduleRequestDto);
-        getSchedule(scheduleIndex).update(
-                updateScheduleRequestDto.getContent(),
-                updateScheduleRequestDto.getStartDate(),
-                updateScheduleRequestDto.getEndDate()
-        );
+        getSchedule(scheduleIndex).update(updateScheduleRequestDto);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.mju.management.domain.model;
 
+import com.mju.management.presentation.dto.CreateScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +34,9 @@ public class Schedule {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    public void update(String content, LocalDate startDate, LocalDate endDate) {
-        this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public void update(CreateScheduleRequestDto updateScheduleRequestDto) {
+        this.content = updateScheduleRequestDto.getContent();
+        this.startDate = updateScheduleRequestDto.getStartDate();
+        this.endDate = updateScheduleRequestDto.getEndDate();
     }
 }
