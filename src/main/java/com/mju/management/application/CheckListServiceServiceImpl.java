@@ -3,7 +3,7 @@ package com.mju.management.application;
 import com.mju.management.domain.model.Exception.ExceptionList;
 import com.mju.management.domain.model.Exception.NonExistentException;
 import com.mju.management.domain.model.CheckList;
-import com.mju.management.domain.repository.CheckListRepository;
+import com.mju.management.domain.model.Exception.repository.CheckListRepository;
 import com.mju.management.presentation.dto.CheckListRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

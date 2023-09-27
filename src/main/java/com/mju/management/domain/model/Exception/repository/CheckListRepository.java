@@ -1,4 +1,4 @@
-package com.mju.management.domain.repository;
+package com.mju.management.domain.model.Exception.repository;
 
 import com.mju.management.domain.model.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;
