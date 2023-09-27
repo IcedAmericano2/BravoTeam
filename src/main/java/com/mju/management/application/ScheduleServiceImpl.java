@@ -29,8 +29,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<Schedule> getScheduleList() {
         List<Schedule> scheduleList = scheduleRepository.findAll();
-        if (scheduleList.isEmpty()) return scheduleList;
-        throw new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULELIST);
+        if (scheduleList.isEmpty()) throw new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULELIST);
+        return scheduleList;
     }
 
     @Override
