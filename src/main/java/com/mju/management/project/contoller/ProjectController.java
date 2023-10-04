@@ -1,10 +1,10 @@
-package com.mju.management.presentation.controller;
+package com.mju.management.project.contoller;
 
-import com.mju.management.application.ProjectService;
-import com.mju.management.domain.model.Project;
+import com.mju.management.project.service.ProjectService;
+import com.mju.management.project.infrastructure.Project;
 import com.mju.management.domain.model.Result.CommonResult;
 import com.mju.management.domain.service.ResponseService;
-import com.mju.management.presentation.dto.ProjectRegisterDto;
+import com.mju.management.project.dto.ProjectRegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

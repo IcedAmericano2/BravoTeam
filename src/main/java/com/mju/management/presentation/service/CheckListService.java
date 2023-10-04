@@ -1,6 +1,6 @@
-package com.mju.management.application;
+package com.mju.management.presentation.service;
 
-import com.mju.management.domain.model.CheckList;
+import com.mju.management.presentation.infrastructure.CheckList;
 import com.mju.management.presentation.dto.CheckListRegisterDto;
 
 import java.util.List;

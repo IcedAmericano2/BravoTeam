@@ -1,7 +1,7 @@
-package com.mju.management.application;
+package com.mju.management.presentation.service;
 
 
-import com.mju.management.domain.model.Schedule;
+import com.mju.management.presentation.infrastructure.Schedule;
 import com.mju.management.presentation.dto.CreateScheduleRequestDto;
 
 import java.util.List;

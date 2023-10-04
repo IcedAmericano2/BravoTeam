@@ -1,6 +1,5 @@
-package com.mju.management.domain.model.Exception.repository;
+package com.mju.management.project.infrastructure;
 
-import com.mju.management.domain.model.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

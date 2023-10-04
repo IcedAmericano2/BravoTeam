@@ -1,7 +1,7 @@
 package com.mju.management.presentation.controller;
 
-import com.mju.management.application.CheckListService;
-import com.mju.management.domain.model.CheckList;
+import com.mju.management.presentation.service.CheckListService;
+import com.mju.management.presentation.infrastructure.CheckList;
 import com.mju.management.domain.model.Result.CommonResult;
 import com.mju.management.domain.service.ResponseService;
 import com.mju.management.presentation.dto.CheckListRegisterDto;

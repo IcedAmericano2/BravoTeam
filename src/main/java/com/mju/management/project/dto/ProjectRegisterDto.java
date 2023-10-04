@@ -1,4 +1,4 @@
-package com.mju.management.presentation.dto;
+package com.mju.management.project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

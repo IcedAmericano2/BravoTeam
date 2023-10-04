@@ -1,18 +1,17 @@
-package com.mju.management.application;
+package com.mju.management.presentation.service;
 
 
 
 import com.mju.management.domain.model.Exception.ExceptionList;
 import com.mju.management.domain.model.Exception.InvalidDateRangeException;
 import com.mju.management.domain.model.Exception.NonExistentException;
-import com.mju.management.domain.model.Exception.repository.ScheduleRepository;
-import com.mju.management.domain.model.Schedule;
+import com.mju.management.presentation.infrastructure.Schedule;
 import com.mju.management.presentation.dto.CreateScheduleRequestDto;
+import com.mju.management.presentation.infrastructure.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

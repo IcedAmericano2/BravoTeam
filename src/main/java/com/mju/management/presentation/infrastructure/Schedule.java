@@ -1,4 +1,4 @@
-package com.mju.management.domain.model;
+package com.mju.management.presentation.infrastructure;
 
 import com.mju.management.presentation.dto.CreateScheduleRequestDto;
 import jakarta.persistence.*;

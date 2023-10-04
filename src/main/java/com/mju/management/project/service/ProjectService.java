@@ -1,7 +1,7 @@
-package com.mju.management.application;
+package com.mju.management.project.service;
 
-import com.mju.management.domain.model.Project;
-import com.mju.management.presentation.dto.ProjectRegisterDto;
+import com.mju.management.project.infrastructure.Project;
+import com.mju.management.project.dto.ProjectRegisterDto;
 
 import java.util.List;
 
