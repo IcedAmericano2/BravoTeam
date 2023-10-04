@@ -1,8 +1,8 @@
-package com.mju.management.presentation.service;
+package com.mju.management.schedule.service;
 
 
-import com.mju.management.presentation.infrastructure.Schedule;
-import com.mju.management.presentation.dto.CreateScheduleRequestDto;
+import com.mju.management.schedule.infrastructure.Schedule;
+import com.mju.management.schedule.dto.CreateScheduleRequestDto;
 
 import java.util.List;
 

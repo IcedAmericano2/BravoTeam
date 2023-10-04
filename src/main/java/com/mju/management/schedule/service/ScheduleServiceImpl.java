@@ -1,13 +1,13 @@
-package com.mju.management.presentation.service;
+package com.mju.management.schedule.service;
 
 
 
 import com.mju.management.domain.model.Exception.ExceptionList;
 import com.mju.management.domain.model.Exception.InvalidDateRangeException;
 import com.mju.management.domain.model.Exception.NonExistentException;
-import com.mju.management.presentation.infrastructure.Schedule;
-import com.mju.management.presentation.dto.CreateScheduleRequestDto;
-import com.mju.management.presentation.infrastructure.ScheduleRepository;
+import com.mju.management.schedule.infrastructure.Schedule;
+import com.mju.management.schedule.dto.CreateScheduleRequestDto;
+import com.mju.management.schedule.infrastructure.ScheduleJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,24 +17,24 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService{
-    private final ScheduleRepository scheduleRepository;
+    private final ScheduleJpaRepository scheduleJpaRepository;
 
     @Override
     public void createSchedule(CreateScheduleRequestDto createScheduleRequestDto) {
         validateDateRange(createScheduleRequestDto);
-        scheduleRepository.save(createScheduleRequestDto.toEntity());
+        scheduleJpaRepository.save(createScheduleRequestDto.toEntity());
     }
 
     @Override
     public List<Schedule> getScheduleList() {
-        List<Schedule> scheduleList = scheduleRepository.findAll();
+        List<Schedule> scheduleList = scheduleJpaRepository.findAll();
         if (scheduleList.isEmpty()) throw new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULELIST);
         return scheduleList;
     }
 
     @Override
     public Schedule getSchedule(Long scheduleIndex) {
-        return scheduleRepository.findById(scheduleIndex)
+        return scheduleJpaRepository.findById(scheduleIndex)
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
     }
 
@@ -47,7 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void deleteSchedule(Long scheduleIndex) {
-        scheduleRepository.delete(getSchedule(scheduleIndex));
+        scheduleJpaRepository.delete(getSchedule(scheduleIndex));
     }
 
     public void validateDateRange(CreateScheduleRequestDto createScheduleRequestDto){

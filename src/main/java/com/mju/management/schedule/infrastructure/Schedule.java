@@ -1,6 +1,6 @@
-package com.mju.management.presentation.infrastructure;
+package com.mju.management.schedule.infrastructure;
 
-import com.mju.management.presentation.dto.CreateScheduleRequestDto;
+import com.mju.management.schedule.dto.CreateScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

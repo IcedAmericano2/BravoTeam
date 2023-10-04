@@ -1,4 +1,4 @@
-package com.mju.management.presentation.infrastructure;
+package com.mju.management.todo.infrastructure;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "checkList")
-public class CheckList {
+public class ToDoEntity {
     @Builder
-    public CheckList(String checkListContent){
+    public ToDoEntity(String checkListContent){
         this.checkListContent = checkListContent;
         this.isChecked = false;
     }
