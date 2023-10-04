@@ -1,4 +1,4 @@
-package com.mju.management.domain.model;
+package com.mju.management.presentation.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;

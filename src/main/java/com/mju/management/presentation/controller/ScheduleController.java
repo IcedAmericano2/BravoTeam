@@ -1,8 +1,8 @@
 package com.mju.management.presentation.controller;
 
-import com.mju.management.application.ScheduleService;
+import com.mju.management.presentation.service.ScheduleService;
 import com.mju.management.domain.model.Result.CommonResult;
-import com.mju.management.domain.model.Schedule;
+import com.mju.management.presentation.domain.Schedule;
 import com.mju.management.domain.service.ResponseService;
 import com.mju.management.presentation.dto.CreateScheduleRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
-package com.mju.management.domain.model.Exception.repository;
+package com.mju.management.presentation.infrastructure;
 
-import com.mju.management.domain.model.CheckList;
-import com.mju.management.domain.model.Schedule;
+import com.mju.management.presentation.domain.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

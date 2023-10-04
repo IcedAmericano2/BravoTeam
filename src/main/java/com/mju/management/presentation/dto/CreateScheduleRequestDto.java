@@ -1,7 +1,7 @@
 package com.mju.management.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.mju.management.domain.model.Schedule;
+import com.mju.management.presentation.domain.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
