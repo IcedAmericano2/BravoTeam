@@ -5,6 +5,8 @@ import com.mju.management.global.model.Result.ListResult;
 import com.mju.management.global.model.Result.SingleResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,15 @@ public class ResponseService {
         this.setSuccessResult(result);
         return result;
     }
+
+    public CommonResult getSuccessfulResultWithMessage(String message) {
+        CommonResult result = new CommonResult();
+        result.setMessage(message);
+        result.setSuccess(true);
+        result.setCode(HttpStatus.OK.value());
+        return result;
+    }
+
     public CommonResult getFailResult(int code, String message) {
         CommonResult result = new CommonResult();
         result.setSuccess(false);

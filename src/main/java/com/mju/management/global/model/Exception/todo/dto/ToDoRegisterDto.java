@@ -1,4 +1,4 @@
-package com.mju.management.domain.todo.dto;
+package com.mju.management.global.model.Exception.todo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

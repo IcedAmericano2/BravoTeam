@@ -2,5 +2,7 @@ package com.mju.management.domain.post.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostJpaRepository extends JpaRepository<PostEntity, Long> {
+import com.mju.management.domain.post.domain.Post;
+
+public interface PostRepository extends JpaRepository<Post, Long> {
 }

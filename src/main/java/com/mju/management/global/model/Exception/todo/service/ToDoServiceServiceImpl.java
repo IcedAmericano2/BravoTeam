@@ -1,10 +1,10 @@
-package com.mju.management.domain.todo.service;
+package com.mju.management.global.model.Exception.todo.service;
 
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
-import com.mju.management.domain.todo.infrastructure.ToDoEntity;
-import com.mju.management.domain.todo.dto.ToDoRegisterDto;
-import com.mju.management.domain.todo.infrastructure.ToDoJpaRepository;
+import com.mju.management.global.model.Exception.todo.infrastructure.ToDoEntity;
+import com.mju.management.global.model.Exception.todo.dto.ToDoRegisterDto;
+import com.mju.management.global.model.Exception.todo.infrastructure.ToDoJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
