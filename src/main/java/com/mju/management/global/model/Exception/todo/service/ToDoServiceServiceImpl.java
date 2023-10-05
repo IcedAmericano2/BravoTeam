@@ -20,16 +20,16 @@ public class ToDoServiceServiceImpl implements ToDoService {
 
     @Override
     @Transactional
-    public void registerCheckList(ToDoRegisterDto toDoRegisterDto) {
+    public void registerToDo(ToDoRegisterDto toDoRegisterDto) {
         ToDoEntity toDoEntity = ToDoEntity.builder()
-                .checkListContent(toDoRegisterDto.getCheckListContent())
+                .todoContent(toDoRegisterDto.getTodoContent())
                 .build();
         toDoJpaRepository.save(toDoEntity);
     }
 
     @Override
     @Transactional
-    public List<ToDoEntity> getCheckList() {
+    public List<ToDoEntity> getToDo() {
         Sort sort = Sort.by(Sort.Order.asc("isChecked"));
         List<ToDoEntity> toDoEntity =  toDoJpaRepository.findAll(sort);
         if (!toDoEntity.isEmpty()) {
@@ -41,10 +41,10 @@ public class ToDoServiceServiceImpl implements ToDoService {
 
     @Override
     @Transactional
-    public void deleteCheckList(Long checkListIndex) {
-        Optional<ToDoEntity> optionalCheckList = toDoJpaRepository.findById(checkListIndex);
-        if (optionalCheckList.isPresent()) { // 해당 index의 CheckList가 존재하는 경우
-            toDoJpaRepository.deleteById(checkListIndex);
+    public void deleteToDo(Long todoIndex) {
+        Optional<ToDoEntity> optionalToDo = toDoJpaRepository.findById(todoIndex);
+        if (optionalToDo.isPresent()) { // 해당 index의 CheckList가 존재하는 경우
+            toDoJpaRepository.deleteById(todoIndex);
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
         }
@@ -52,10 +52,10 @@ public class ToDoServiceServiceImpl implements ToDoService {
 
     @Override
     @Transactional
-    public ToDoEntity showCheckListOne(Long checkListIndex) {
-        Optional<ToDoEntity> optionalCheckList = toDoJpaRepository.findById(checkListIndex);
-        if (optionalCheckList.isPresent()) {
-            ToDoEntity toDoEntity = optionalCheckList.get();
+    public ToDoEntity showToDoOne(Long todoIndex) {
+        Optional<ToDoEntity> optionalToDo = toDoJpaRepository.findById(todoIndex);
+        if (optionalToDo.isPresent()) {
+            ToDoEntity toDoEntity = optionalToDo.get();
             return toDoEntity;
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
@@ -64,11 +64,11 @@ public class ToDoServiceServiceImpl implements ToDoService {
 
     @Override
     @Transactional
-    public void updateCheckList(Long checkListIndex, ToDoRegisterDto toDoRegisterDto) {
-        Optional<ToDoEntity> optionalCheckList = toDoJpaRepository.findById(checkListIndex);
-        if (optionalCheckList.isPresent()) {
-            ToDoEntity toDoEntity = optionalCheckList.get();
-            toDoEntity.update(toDoRegisterDto.getCheckListContent());
+    public void updateToDo(Long todoIndex, ToDoRegisterDto toDoRegisterDto) {
+        Optional<ToDoEntity> optionalToDo = toDoJpaRepository.findById(todoIndex);
+        if (optionalToDo.isPresent()) {
+            ToDoEntity toDoEntity = optionalToDo.get();
+            toDoEntity.update(toDoRegisterDto.getTodoContent());
             toDoJpaRepository.save(toDoEntity);
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
@@ -77,10 +77,10 @@ public class ToDoServiceServiceImpl implements ToDoService {
 
     @Override
     @Transactional
-    public void finishCheckList(Long checkListIndex) {
-        Optional<ToDoEntity> optionalCheckList = toDoJpaRepository.findById(checkListIndex);
-        if (optionalCheckList.isPresent()) {
-            ToDoEntity toDoEntity = optionalCheckList.get();
+    public void finishToDo(Long todoIndex) {
+        Optional<ToDoEntity> optionalToDo = toDoJpaRepository.findById(todoIndex);
+        if (optionalToDo.isPresent()) {
+            ToDoEntity toDoEntity = optionalToDo.get();
             toDoEntity.finish();
             toDoJpaRepository.save(toDoEntity);
         } else {

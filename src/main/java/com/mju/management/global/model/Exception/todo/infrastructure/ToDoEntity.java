@@ -8,27 +8,27 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "checkList")
+@Table(name = "todo")
 public class ToDoEntity {
     @Builder
-    public ToDoEntity(String checkListContent){
-        this.checkListContent = checkListContent;
+    public ToDoEntity(String todoContent){
+        this.todoContent = todoContent;
         this.isChecked = false;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "checkList_index")
-    private Long checkListIndex;
+    @Column(name = "todo_index")
+    private Long todoIndex;
 
-    @Column(name = "checkList_content")
-    private String checkListContent;
+    @Column(name = "todo_content")
+    private String todoContent;
 
     @Column(name = "isChecked")
     private boolean isChecked;
 
-    public void update(String checkListContent) {
-        this.checkListContent = checkListContent;
+    public void update(String todoContent) {
+        this.todoContent = todoContent;
         this.isChecked = false;
     }
 

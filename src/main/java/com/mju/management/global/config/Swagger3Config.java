@@ -18,7 +18,7 @@ public class Swagger3Config {
 
     @Bean
     public GroupedOpenApi chatOpenApi() {
-        String[] paths = {"/api/**","/lecture-service/**"};
+        String[] paths = {"/api/**"};
 
         SecurityScheme cookieAuthScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.APIKEY)
