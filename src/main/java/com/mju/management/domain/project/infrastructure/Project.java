@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mju.management.domain.post.domain.Post;
 
 @Getter
 @NoArgsConstructor
@@ -41,6 +45,16 @@ public class Project {
 
     @Column(name = "isChecked")
     private boolean isChecked;
+
+    // Post(기획, 제작, 편집 게시글)와 연관 관계
+    @OneToMany
+    @JoinColumn(name = "project")
+    private List<Post> postList = new ArrayList<>();
+
+    public void createPost(Post post){
+        this.postList.add(post);
+        post.setProject(this);
+    }
 
     @PrePersist
     public void prePersist(){

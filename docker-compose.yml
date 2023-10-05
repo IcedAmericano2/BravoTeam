@@ -3,10 +3,10 @@ version: '3.8'
 services:
   # mysql
   mysql:
-    container_name: mysql
+    container_name: IA_mysql
     image: mysql:8.0
     env_file:
-      - .env
+      - .env\
     environment:
       TZ: Asia/Seoul
     ports:

@@ -5,11 +5,15 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "posts")
+@Table(name = "post")
 public class PostEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+
+
 
 }

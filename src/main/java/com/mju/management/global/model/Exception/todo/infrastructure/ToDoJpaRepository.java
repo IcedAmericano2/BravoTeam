@@ -1,4 +1,4 @@
-package com.mju.management.domain.todo.infrastructure;
+package com.mju.management.global.model.Exception.todo.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
