@@ -1,8 +1,8 @@
-package com.mju.management.global.model.Exception.todo.controller;
+package com.mju.management.domain.todo.controller;
 
-import com.mju.management.global.model.Exception.todo.dto.ToDoRegisterDto;
-import com.mju.management.global.model.Exception.todo.infrastructure.ToDoEntity;
-import com.mju.management.global.model.Exception.todo.service.ToDoService;
+import com.mju.management.domain.todo.dto.ToDoRegisterDto;
+import com.mju.management.domain.todo.service.ToDoService;
+import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
 import io.swagger.v3.oas.annotations.Operation;

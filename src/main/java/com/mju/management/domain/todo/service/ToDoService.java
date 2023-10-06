@@ -1,7 +1,7 @@
-package com.mju.management.global.model.Exception.todo.service;
+package com.mju.management.domain.todo.service;
 
-import com.mju.management.global.model.Exception.todo.infrastructure.ToDoEntity;
-import com.mju.management.global.model.Exception.todo.dto.ToDoRegisterDto;
+import com.mju.management.domain.todo.infrastructure.ToDoEntity;
+import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 
 import java.util.List;
 

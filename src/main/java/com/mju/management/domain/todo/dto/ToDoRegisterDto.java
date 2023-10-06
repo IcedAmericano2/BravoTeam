@@ -1,4 +1,4 @@
-package com.mju.management.global.model.Exception.todo.dto;
+package com.mju.management.domain.todo.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
