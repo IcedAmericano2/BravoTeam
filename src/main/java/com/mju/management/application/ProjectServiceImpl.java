@@ -55,7 +55,7 @@ public class ProjectServiceImpl implements ProjectService{
         Optional<Project> optionalProject = projectRepository.findById(projectIndex);
         if (optionalProject.isPresent()){
             Project project = optionalProject.get();
-            project.update(projectRegisterDto.getName(), projectRegisterDto.getDescription());
+            project.update(projectRegisterDto.getName(), projectRegisterDto.getSDate(), projectRegisterDto.getFDate(), projectRegisterDto.getDescription());
             projectRepository.save(project);
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
