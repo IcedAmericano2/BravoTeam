@@ -56,14 +56,10 @@ public class Project {
         post.setProject(this);
     }
 
-    @PrePersist
-    public void prePersist(){
-        this.sDate = LocalDate.now();
-    }
-
-    public void update(String name, String description){
+    public void update(String name, LocalDate sDate, LocalDate fDate, String description){
         this.name = name;
-//        this.fDate = fDate;
+        this.sDate = sDate;
+        this.fDate = fDate;
         this.description = description;
         this.isChecked = false;
     }
