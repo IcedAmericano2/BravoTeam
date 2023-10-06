@@ -8,6 +8,13 @@ import lombok.RequiredArgsConstructor;
 public enum ExceptionList {
 
     UNKNOWN(-9999, "알 수 없는 오류가 발생하였습니다."),
+
+    EMPTY_USER(-5051, "유저 정보를 입력해 주세요."),
+    NOT_CORRECT_USER(-5052, "수강생이 아닙니다. 수강생으로 로그인 다시 부탁드립니다."),
+    NOT_ACCESS_USER(-5053, "접근할 수 없는 유저 입니다."),
+    EMPTY_JWT(-5054, "토큰이 없습니다. 확인부탁드립니다."),
+    NOT_EXISTENT_USER(-5055, "존재하지 않는 유저입니다."),
+
     NON_EXISTENT_CHECKLIST(5005, "내용이 존재하지 않습니다."),
     NON_EXISTENT_SCHEDULE(5006, "일정이 존재하지 않습니다."),
     NON_EXISTENT_SCHEDULELIST(5007, "일정 목록이 존재하지 않습니다."),
