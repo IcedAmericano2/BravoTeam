@@ -31,10 +31,10 @@ public class ExceptionService {
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
 
-    @ExceptionHandler(InvalidDateRangeException.class)
+    @ExceptionHandler(StartDateAfterEndDateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected CommonResult invalidDateRangeException(InvalidDateRangeException e) {
-        log.error("invalid date range exception", e);
+    protected CommonResult startDateAfterEndDateException(StartDateAfterEndDateException e) {
+        log.error("start date after end date exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
@@ -49,7 +49,7 @@ public class ExceptionService {
 
     @ExceptionHandler(OutOfProjectScheduleRangeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected CommonResult invalidDateFormatException(OutOfProjectScheduleRangeException e) {
+    protected CommonResult outOfProjectScheduleRangeException(OutOfProjectScheduleRangeException e) {
         log.error("out of project's schedule range exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());

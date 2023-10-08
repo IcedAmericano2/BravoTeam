@@ -7,7 +7,7 @@ import com.mju.management.domain.project.infrastructure.ProjectRepository;
 import com.mju.management.domain.schedule.dto.response.GetScheduleResponseDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.global.model.Exception.ExceptionList;
-import com.mju.management.global.model.Exception.InvalidDateRangeException;
+import com.mju.management.global.model.Exception.StartDateAfterEndDateException;
 import com.mju.management.global.model.Exception.NonExistentException;
 import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.infrastructure.ScheduleRepository;
@@ -73,7 +73,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         LocalDate startDate = createScheduleRequestDto.readStartDateAsLocalDateType();
         LocalDate endDate = createScheduleRequestDto.readEndDateAsLocalDateType();
         if(startDate.isAfter(endDate))
-            throw new InvalidDateRangeException(ExceptionList.INVALID_DATE_RANGE);
+            throw new StartDateAfterEndDateException(ExceptionList.START_DATE_AFTER_END_DATE_EXCEPTION);
         if(startDate.isBefore(project.getSDate()) || endDate.isAfter(project.getFDate()))
             throw new OutOfProjectScheduleRangeException(ExceptionList.OUT_OF_PROJECT_SCHEDULE_RANGE);
     }
