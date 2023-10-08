@@ -1,5 +1,6 @@
 package com.mju.management.domain.schedule.dto.reqeust;
 
+import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.InvalidDateFormatException;
@@ -13,8 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateScheduleRequestDto {
 
     @NotBlank(message = "내용을 입력해주세요.")
@@ -30,8 +31,9 @@ public class CreateScheduleRequestDto {
     @Schema(description = "일정 종료일", defaultValue = "2023-11-07")
     private String endDate;
 
-    public Schedule toEntity(){
+    public Schedule toEntity(Project project){
         return Schedule.builder()
+                .project(project)
                 .content(content)
                 .startDate(readStartDateAsLocalDateType())
                 .endDate(readEndDateAsLocalDateType())
