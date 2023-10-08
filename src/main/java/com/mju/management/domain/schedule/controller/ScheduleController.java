@@ -1,59 +1,70 @@
 package com.mju.management.domain.schedule.controller;
 
+import com.mju.management.domain.schedule.dto.response.GetScheduleResponseDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.domain.schedule.service.ScheduleService;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
-import com.mju.management.domain.schedule.dto.CreateScheduleRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/bravoTeam-service/schedules")
-public class ScheduleController {
-    @Autowired
-    ScheduleService scheduleService;
-    @Autowired
-    ResponseService responseService;
+import static org.springframework.http.HttpStatus.OK;
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "fong";
-    }
+@Tag(name = "일정 CRUD API", description = "일정 CRUD API")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class ScheduleController {
+    private final ScheduleService scheduleService;
+    private final ResponseService responseService;
 
     //일정 등록
-    @PostMapping()
-    public CommonResult createSchedule(@RequestBody CreateScheduleRequestDto createScheduleRequestDto){
-        scheduleService.createSchedule(createScheduleRequestDto);
+    @Operation(summary = "프로젝트 일정 등록", description = "프로젝트에 일정을 등록하는 API")
+    @ResponseStatus(OK)
+    @PostMapping("/projects/{projectId}/schedules")
+    public CommonResult createSchedule(@PathVariable Long projectId, @Valid @RequestBody CreateScheduleRequestDto createScheduleRequestDto){
+        scheduleService.createSchedule(projectId, createScheduleRequestDto);
         return responseService.getSuccessfulResult();
     }
 
-    //일정 전체 조회
-    @GetMapping()
-    public CommonResult getScheduleList() {
-        List<Schedule> scheduleList = scheduleService.getScheduleList();
+    //일정 목록 조회
+    @Operation(summary = "프로젝트 일정 목록 가져오기", description = "프로젝트의 일정 목록 가져오기 API")
+    @ResponseStatus(OK)
+    @GetMapping("/projects/{projectId}/schedules")
+    public CommonResult getScheduleList(@PathVariable Long projectId) {
+        List<GetScheduleResponseDto> scheduleList = scheduleService.getScheduleList(projectId);
         return responseService.getListResult(scheduleList);
     }
 
     //일정 하나 조회
-    @GetMapping("/{scheduleIndex}")
-    public CommonResult getSchedule(@PathVariable Long scheduleIndex) {
-        Schedule schedule = scheduleService.getSchedule(scheduleIndex);
+    @Operation(summary = "일정 가져오기", description = "일정 가져오기 API")
+    @ResponseStatus(OK)
+    @GetMapping("schedules/{scheduleId}")
+    public CommonResult getSchedule(@PathVariable Long scheduleId) {
+        GetScheduleResponseDto schedule = scheduleService.getSchedule(scheduleId);
         return responseService.getSingleResult(schedule);
     }
 
     //일정 수정
-    @PutMapping("/{scheduleIndex}")
-    public CommonResult updateSchedule(@PathVariable Long scheduleIndex, @RequestBody CreateScheduleRequestDto updateScheduleRequestDto) {
-        scheduleService.updateSchedule(scheduleIndex, updateScheduleRequestDto);
+    @Operation(summary = "일정 수정", description = "일정 수정 API")
+    @ResponseStatus(OK)
+    @PutMapping("schedules/{scheduleId}")
+    public CommonResult updateSchedule(@PathVariable Long scheduleId, @Valid @RequestBody CreateScheduleRequestDto updateScheduleRequestDto) {
+        scheduleService.updateSchedule(scheduleId, updateScheduleRequestDto);
         return responseService.getSuccessfulResult();
     }
     //일정 삭제
-    @DeleteMapping("/{scheduleIndex}")
-    public CommonResult deleteSchedule(@PathVariable Long scheduleIndex) {
-        scheduleService.deleteSchedule(scheduleIndex);
+    @Operation(summary = "일정 삭제", description = "일정 삭제 API")
+    @ResponseStatus(OK)
+    @DeleteMapping("schedules/{scheduleId}")
+    public CommonResult deleteSchedule(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
         return responseService.getSuccessfulResult();
     }
 }

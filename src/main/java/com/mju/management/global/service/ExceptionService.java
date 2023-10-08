@@ -1,8 +1,6 @@
 package com.mju.management.global.service;
 
-import com.mju.management.global.model.Exception.ExceptionList;
-import com.mju.management.global.model.Exception.InvalidDateRangeException;
-import com.mju.management.global.model.Exception.NonExistentException;
+import com.mju.management.global.model.Exception.*;
 import com.mju.management.global.model.Result.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +24,33 @@ public class ExceptionService {
     }
 
     @ExceptionHandler({NonExistentException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected CommonResult handleCustom(NonExistentException e) {
         log.error("non existent exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
 
-    @ExceptionHandler({InvalidDateRangeException.class})
-    protected CommonResult invalidDateRangeException(InvalidDateRangeException e) {
-        log.error("invalid date range exception", e);
+    @ExceptionHandler(StartDateAfterEndDateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected CommonResult startDateAfterEndDateException(StartDateAfterEndDateException e) {
+        log.error("start date after end date exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
+
+    @ExceptionHandler(InvalidDateFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected CommonResult invalidDateFormatException(InvalidDateFormatException e) {
+        log.error("invalid date format exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
+
+    @ExceptionHandler(OutOfProjectScheduleRangeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected CommonResult outOfProjectScheduleRangeException(OutOfProjectScheduleRangeException e) {
+        log.error("out of project's schedule range exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }

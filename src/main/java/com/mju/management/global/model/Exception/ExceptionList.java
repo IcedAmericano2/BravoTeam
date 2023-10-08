@@ -16,9 +16,14 @@ public enum ExceptionList {
     NOT_EXISTENT_USER(-5055, "존재하지 않는 유저입니다."),
 
     NON_EXISTENT_CHECKLIST(5005, "내용이 존재하지 않습니다."),
-    NON_EXISTENT_SCHEDULE(5006, "일정이 존재하지 않습니다."),
-    NON_EXISTENT_SCHEDULELIST(5007, "일정 목록이 존재하지 않습니다."),
-    INVALID_DATE_RANGE_EXCEPTION(5008, "날짜의 범위가 잘못되었습니다."),
+
+    // SCHEDULE
+    NON_EXISTENT_SCHEDULE(6000, "일정이 존재하지 않습니다."),
+    NON_EXISTENT_SCHEDULELIST(6001, "일정 목록이 존재하지 않습니다."),
+    START_DATE_AFTER_END_DATE_EXCEPTION(6002, "시작일이 종료일의 이후입니다."),
+    INVALID_DATE_FORMAT(6003, "유효하지 않은 날짜 형태입니다."),
+    OUT_OF_PROJECT_SCHEDULE_RANGE(6004, "프로젝트의 일정 범위를 벗어났습니다."),
+
     NON_EXISTENT_PROJECT(5008, "프로젝트가 존재하지 않습니다."),
     INVALID_INPUT_VALUE(5009, "유효성 검사에 실패하였습니다."),
     // PROJECT
