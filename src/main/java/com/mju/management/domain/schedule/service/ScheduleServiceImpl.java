@@ -6,7 +6,7 @@ import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.InvalidDateRangeException;
 import com.mju.management.global.model.Exception.NonExistentException;
-import com.mju.management.domain.schedule.dto.CreateScheduleRequestDto;
+import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.infrastructure.ScheduleJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,25 +33,26 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public Schedule getSchedule(Long scheduleIndex) {
-        return scheduleJpaRepository.findById(scheduleIndex)
+    public Schedule getSchedule(Long scheduleId) {
+        return scheduleJpaRepository.findById(scheduleId)
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
     }
 
     @Override
     @Transactional
-    public void updateSchedule(Long scheduleIndex, CreateScheduleRequestDto updateScheduleRequestDto) {
+    public void updateSchedule(Long scheduleId, CreateScheduleRequestDto updateScheduleRequestDto) {
         validateDateRange(updateScheduleRequestDto);
-        getSchedule(scheduleIndex).update(updateScheduleRequestDto);
+        getSchedule(scheduleId).update(updateScheduleRequestDto);
     }
 
     @Override
-    public void deleteSchedule(Long scheduleIndex) {
-        scheduleJpaRepository.delete(getSchedule(scheduleIndex));
+    public void deleteSchedule(Long scheduleId) {
+        scheduleJpaRepository.delete(getSchedule(scheduleId));
     }
 
     public void validateDateRange(CreateScheduleRequestDto createScheduleRequestDto){
-        if(createScheduleRequestDto.getStartDate().isAfter(createScheduleRequestDto.getEndDate()))
-            throw new InvalidDateRangeException(ExceptionList.INVALID_DATE_RANGE_EXCEPTION);
+        if(createScheduleRequestDto.readStartDateAsLocalDateType()
+                .isAfter(createScheduleRequestDto.readEndDateAsLocalDateType()))
+            throw new InvalidDateRangeException(ExceptionList.INVALID_DATE_RANGE);
     }
 }

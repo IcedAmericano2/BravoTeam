@@ -1,9 +1,9 @@
 package com.mju.management.global.model.Exception;
 
-public class InvalidDateRangeException extends RuntimeException{
+public class InvalidDateFormatException extends RuntimeException{
     private final ExceptionList exceptionList;
 
-    public InvalidDateRangeException(ExceptionList exceptionList) {
+    public InvalidDateFormatException(ExceptionList exceptionList) {
         super(exceptionList.getMessage());
         this.exceptionList = exceptionList;
     }

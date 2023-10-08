@@ -1,6 +1,6 @@
 package com.mju.management.domain.schedule.infrastructure;
 
-import com.mju.management.domain.schedule.dto.CreateScheduleRequestDto;
+import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,8 +22,8 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "schedule_index")
-    private Long scheduleIndex;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -36,7 +36,7 @@ public class Schedule {
 
     public void update(CreateScheduleRequestDto updateScheduleRequestDto) {
         this.content = updateScheduleRequestDto.getContent();
-        this.startDate = updateScheduleRequestDto.getStartDate();
-        this.endDate = updateScheduleRequestDto.getEndDate();
+        this.startDate = updateScheduleRequestDto.readStartDateAsLocalDateType();
+        this.endDate = updateScheduleRequestDto.readEndDateAsLocalDateType();
     }
 }
