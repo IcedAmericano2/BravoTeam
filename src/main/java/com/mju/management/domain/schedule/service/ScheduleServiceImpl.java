@@ -11,10 +11,12 @@ import com.mju.management.global.model.Exception.InvalidDateRangeException;
 import com.mju.management.global.model.Exception.NonExistentException;
 import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.infrastructure.ScheduleRepository;
+import com.mju.management.global.model.Exception.OutOfProjectScheduleRangeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +28,9 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void createSchedule(Long projectId, CreateScheduleRequestDto createScheduleRequestDto) {
-        validateDateRange(createScheduleRequestDto);
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
+        validateSchedule(createScheduleRequestDto, project);
         scheduleRepository.save(createScheduleRequestDto.toEntity(project));
     }
 
@@ -36,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public List<GetScheduleResponseDto> getScheduleList(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        List<GetScheduleResponseDto> scheduleList = scheduleRepository.findByProject(project)
+        List<GetScheduleResponseDto> scheduleList = scheduleRepository.findAllByProject(project)
                 .stream()
                 .map(schedule -> GetScheduleResponseDto.from(schedule))
                 .collect(Collectors.toList());
@@ -54,10 +56,10 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     @Transactional
     public void updateSchedule(Long scheduleId, CreateScheduleRequestDto updateScheduleRequestDto) {
-        validateDateRange(updateScheduleRequestDto);
-        scheduleRepository.findById(scheduleId)
-                .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE))
-                .update(updateScheduleRequestDto);
+        Schedule schedule =  scheduleRepository.findByIdWithProject(scheduleId)
+                .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
+        validateSchedule(updateScheduleRequestDto, schedule.getProject());
+        schedule.update(updateScheduleRequestDto);
     }
 
     @Override
@@ -67,9 +69,12 @@ public class ScheduleServiceImpl implements ScheduleService{
         scheduleRepository.delete(schedule);
     }
 
-    public void validateDateRange(CreateScheduleRequestDto createScheduleRequestDto){
-        if(createScheduleRequestDto.readStartDateAsLocalDateType()
-                .isAfter(createScheduleRequestDto.readEndDateAsLocalDateType()))
+    public void validateSchedule(CreateScheduleRequestDto createScheduleRequestDto, Project project){
+        LocalDate startDate = createScheduleRequestDto.readStartDateAsLocalDateType();
+        LocalDate endDate = createScheduleRequestDto.readEndDateAsLocalDateType();
+        if(startDate.isAfter(endDate))
             throw new InvalidDateRangeException(ExceptionList.INVALID_DATE_RANGE);
+        if(startDate.isBefore(project.getSDate()) || endDate.isAfter(project.getFDate()))
+            throw new OutOfProjectScheduleRangeException(ExceptionList.OUT_OF_PROJECT_SCHEDULE_RANGE);
     }
 }

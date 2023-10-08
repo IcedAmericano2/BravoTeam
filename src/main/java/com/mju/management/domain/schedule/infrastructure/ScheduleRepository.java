@@ -2,9 +2,15 @@ package com.mju.management.domain.schedule.infrastructure;
 
 import com.mju.management.domain.project.infrastructure.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByProject(Project project);
+    List<Schedule> findAllByProject(Project project);
+
+    @Query("SELECT s FROM Schedule s JOIN FETCH s.project WHERE s.scheduleId = :scheduleId")
+    Optional<Schedule> findByIdWithProject(@Param("scheduleId") Long scheduleId);
 }

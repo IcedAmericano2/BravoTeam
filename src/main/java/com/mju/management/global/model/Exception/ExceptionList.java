@@ -20,8 +20,9 @@ public enum ExceptionList {
     // SCHEDULE
     NON_EXISTENT_SCHEDULE(6000, "일정이 존재하지 않습니다."),
     NON_EXISTENT_SCHEDULELIST(6001, "일정 목록이 존재하지 않습니다."),
-    INVALID_DATE_RANGE(6001, "유효하지 않은 날짜 범위입니다."),
+    INVALID_DATE_RANGE(6002, "유효하지 않은 날짜 범위입니다."),
     INVALID_DATE_FORMAT(6003, "유효하지 않은 날짜 형태입니다."),
+    OUT_OF_PROJECT_SCHEDULE_RANGE(6004, "프로젝트의 일정 범위를 벗어났습니다."),
 
     NON_EXISTENT_PROJECT(5008, "프로젝트가 존재하지 않습니다."),
     INVALID_INPUT_VALUE(5009, "유효성 검사에 실패하였습니다."),

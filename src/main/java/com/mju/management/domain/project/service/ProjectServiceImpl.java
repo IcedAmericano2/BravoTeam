@@ -23,6 +23,8 @@ public class ProjectServiceImpl implements ProjectService{
         Project project = Project.builder()
                 .name(projectRegisterDto.getName())
                 .description(projectRegisterDto.getDescription())
+                .sDate(projectRegisterDto.getSDate())
+                .fDate(projectRegisterDto.getFDate())
                 .build();
         projectRepository.save(project);
     }

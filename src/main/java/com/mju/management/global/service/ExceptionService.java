@@ -1,9 +1,6 @@
 package com.mju.management.global.service;
 
-import com.mju.management.global.model.Exception.ExceptionList;
-import com.mju.management.global.model.Exception.InvalidDateFormatException;
-import com.mju.management.global.model.Exception.InvalidDateRangeException;
-import com.mju.management.global.model.Exception.NonExistentException;
+import com.mju.management.global.model.Exception.*;
 import com.mju.management.global.model.Result.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +43,14 @@ public class ExceptionService {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected CommonResult invalidDateFormatException(InvalidDateFormatException e) {
         log.error("invalid date format exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
+
+    @ExceptionHandler(OutOfProjectScheduleRangeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected CommonResult invalidDateFormatException(OutOfProjectScheduleRangeException e) {
+        log.error("out of project's schedule range exception", e);
         ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
