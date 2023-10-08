@@ -25,7 +25,7 @@ public class ScheduleController {
     private final ResponseService responseService;
 
     //일정 등록
-    @Operation(summary = "프로젝트 일정 등록", description = "프로젝트에 일정을 등록하는 API")
+    @Operation(summary = "일정 등록하기", description = "특정 프로젝트 내에서 일정을 등록하는 API")
     @ResponseStatus(OK)
     @PostMapping("/projects/{projectId}/schedules")
     public CommonResult createSchedule(@PathVariable Long projectId, @Valid @RequestBody CreateScheduleRequestDto createScheduleRequestDto){
@@ -34,7 +34,7 @@ public class ScheduleController {
     }
 
     //일정 목록 조회
-    @Operation(summary = "프로젝트 일정 목록 가져오기", description = "프로젝트의 일정 목록 가져오기 API")
+    @Operation(summary = "일정 목록 가져오기", description = "특정 프로젝트의 일정 목록을 가져오는 API")
     @ResponseStatus(OK)
     @GetMapping("/projects/{projectId}/schedules")
     public CommonResult getScheduleList(@PathVariable Long projectId) {
@@ -43,7 +43,7 @@ public class ScheduleController {
     }
 
     //일정 하나 조회
-    @Operation(summary = "일정 가져오기", description = "일정 가져오기 API")
+    @Operation(summary = "일정 가져오기", description = "일정을 가져오는 API")
     @ResponseStatus(OK)
     @GetMapping("schedules/{scheduleId}")
     public CommonResult getSchedule(@PathVariable Long scheduleId) {
@@ -52,7 +52,7 @@ public class ScheduleController {
     }
 
     //일정 수정
-    @Operation(summary = "일정 수정", description = "일정 수정 API")
+    @Operation(summary = "일정 수정하기", description = "일정을 수정하는 API")
     @ResponseStatus(OK)
     @PutMapping("schedules/{scheduleId}")
     public CommonResult updateSchedule(@PathVariable Long scheduleId, @Valid @RequestBody CreateScheduleRequestDto updateScheduleRequestDto) {
@@ -60,7 +60,7 @@ public class ScheduleController {
         return responseService.getSuccessfulResult();
     }
     //일정 삭제
-    @Operation(summary = "일정 삭제", description = "일정 삭제 API")
+    @Operation(summary = "일정 삭제하기", description = "일정을 삭제하는 API")
     @ResponseStatus(OK)
     @DeleteMapping("schedules/{scheduleId}")
     public CommonResult deleteSchedule(@PathVariable Long scheduleId) {
