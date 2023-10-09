@@ -31,7 +31,7 @@ public class Project {
 
     @Id
     @Column(name = "project_index")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectIndex;
 
     @Column(name = "project_name")
