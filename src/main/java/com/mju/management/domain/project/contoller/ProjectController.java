@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/project-service")
+@RequestMapping("/api/project")
 public class ProjectController {
     @Autowired
     ProjectService projectService;

@@ -14,7 +14,6 @@ public enum ExceptionList {
     NOT_ACCESS_USER(-5053, "접근할 수 없는 유저 입니다."),
     EMPTY_JWT(-5054, "토큰이 없습니다. 확인부탁드립니다."),
     NOT_EXISTENT_USER(-5055, "존재하지 않는 유저입니다."),
-
     NON_EXISTENT_CHECKLIST(5005, "내용이 존재하지 않습니다."),
 
     // SCHEDULE

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ToDoRegisterDto {
+public class ToDoRequestDto {
 
     @Schema(description = "할일 내용", defaultValue = "할일 내용")
     private String todoContent;
