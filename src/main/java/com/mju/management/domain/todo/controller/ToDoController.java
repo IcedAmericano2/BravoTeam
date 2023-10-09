@@ -11,10 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Tag(name = "ToDoController", description = "할 일 관련 API")
 @RestController
 @RequestMapping("/api/todo")
-@Tag(name = "ToDoController", description = "할 일 관련 API")
 public class ToDoController {
     @Autowired
     ToDoService toDoService;
@@ -46,8 +45,9 @@ public class ToDoController {
     @GetMapping("/{todoIndex}")
     @Operation(summary = "할일 선택 조회", description = "할일 선택 조회 api")
     public CommonResult showToDoOne(@PathVariable Long todoIndex) {
-        toDoService.showToDoOne(todoIndex);
-        return responseService.getSuccessfulResult();
+        ToDoEntity toDoEntity = toDoService.showToDoOne(todoIndex);
+        CommonResult commonResult = responseService.getSingleResult(toDoEntity);
+        return commonResult;
     }
     //체크박스 수정
     @PutMapping("/{todoIndex}")
@@ -66,9 +66,10 @@ public class ToDoController {
 
     //체크박스 클릭(완료 표시)
     @GetMapping("/finish/{todoIndex}")
-    @Operation(summary = "할일 완료 표시", description = "할일 완료 표시 api")
+    @Operation(summary = "할일 check or uncheck 표시", description = "할일 check or uncheck 표시 api")
     public CommonResult finishToDo(@PathVariable Long todoIndex) {
         toDoService.finishToDo(todoIndex);
         return responseService.getSuccessfulResult();
     }
+
 }

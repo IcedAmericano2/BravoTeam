@@ -1,10 +1,10 @@
 package com.mju.management.domain.todo.service;
 
+import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.domain.todo.infrastructure.ToDoJpaRepository;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
-import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -23,6 +23,7 @@ public class ToDoServiceServiceImpl implements ToDoService {
     public void registerToDo(ToDoRegisterDto toDoRegisterDto) {
         ToDoEntity toDoEntity = ToDoEntity.builder()
                 .todoContent(toDoRegisterDto.getTodoContent())
+                .todoEmergency(toDoRegisterDto.isTodoEmergency())
                 .build();
         toDoJpaRepository.save(toDoEntity);
     }
@@ -81,7 +82,7 @@ public class ToDoServiceServiceImpl implements ToDoService {
         Optional<ToDoEntity> optionalToDo = toDoJpaRepository.findById(todoIndex);
         if (optionalToDo.isPresent()) {
             ToDoEntity toDoEntity = optionalToDo.get();
-            toDoEntity.finish();
+            toDoEntity.finish(toDoEntity.isChecked());
             toDoJpaRepository.save(toDoEntity);
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);

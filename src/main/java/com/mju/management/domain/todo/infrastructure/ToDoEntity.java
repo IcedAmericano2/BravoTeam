@@ -11,28 +11,36 @@ import lombok.NoArgsConstructor;
 @Table(name = "todo")
 public class ToDoEntity {
     @Builder
-    public ToDoEntity(String todoContent){
+    public ToDoEntity(String todoContent, boolean todoEmergency){
         this.todoContent = todoContent;
-        this.isChecked = false;
+        this.todoEmergency = todoEmergency;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_index")
     private Long todoIndex;
 
     @Column(name = "todo_content")
     private String todoContent;
 
-    @Column(name = "isChecked")
+    @Column(name = "is_checked")
     private boolean isChecked;
+
+    @Column(name = "todo_emergency")
+    private boolean todoEmergency;
 
     public void update(String todoContent) {
         this.todoContent = todoContent;
         this.isChecked = false;
     }
 
-    public void finish() {
-        this.isChecked = true;
+    public void finish(boolean isChecked) {
+        if(!isChecked){
+            this.isChecked = true;
+        }else {
+            this.isChecked = false;
+        }
+
     }
 }
