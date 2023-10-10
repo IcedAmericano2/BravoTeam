@@ -1,6 +1,7 @@
 package com.mju.management.domain.project.infrastructure;
 
 import com.mju.management.domain.schedule.infrastructure.Schedule;
+import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +22,9 @@ import static jakarta.persistence.CascadeType.ALL;
 public class Project {
 
     @Builder
-    public Project(String name, LocalDate sDate, LocalDate fDate, String description){
+    public Project(String name, /*String user_id, */LocalDate sDate, LocalDate fDate, String description){
         this.name = name;
+//        this.userId = user_id;
         this.sDate = sDate;
         this.fDate = fDate;
         this.description = description;
@@ -33,6 +35,9 @@ public class Project {
     @Column(name = "project_index")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long projectIndex;
+
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(name = "project_name")
     private String name;
@@ -57,9 +62,18 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
     private List<Schedule> scheduleList = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "project")
+    private List<ToDoEntity> ToDoList = new ArrayList<>();
+
     public void createPost(Post post){
         this.postList.add(post);
         post.setProject(this);
+    }
+
+    public void registerToDo(ToDoEntity toDoEntity){
+        this.ToDoList.add(toDoEntity);
+        toDoEntity.setProject(this);
     }
 
     public void update(String name, LocalDate sDate, LocalDate fDate, String description){

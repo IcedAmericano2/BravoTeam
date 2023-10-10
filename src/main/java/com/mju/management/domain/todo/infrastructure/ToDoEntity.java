@@ -1,5 +1,7 @@
 package com.mju.management.domain.todo.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mju.management.domain.project.infrastructure.Project;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +28,15 @@ public class ToDoEntity {
 
     @Column(name = "isChecked")
     private boolean isChecked;
+
+    @ManyToOne
+    @JoinColumn(name = "project_index")
+    @JsonIgnore
+    private Project project;
+
+    public void setProject(Project project){
+        this.project = project;
+    }
 
     public void update(String todoContent) {
         this.todoContent = todoContent;

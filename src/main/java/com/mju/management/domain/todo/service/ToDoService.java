@@ -6,9 +6,9 @@ import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import java.util.List;
 
 public interface ToDoService {
-    public void registerToDo(ToDoRegisterDto toDoRegisterDto);
+    public void registerToDo(Long projectId, ToDoRegisterDto toDoRegisterDto);
 
-    public List<ToDoEntity> getToDo();
+    public List<ToDoEntity> getToDo(Long projectId);
 
     public void deleteToDo(Long todoIndex);
 

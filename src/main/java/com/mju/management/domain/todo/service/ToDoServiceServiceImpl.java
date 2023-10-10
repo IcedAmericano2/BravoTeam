@@ -1,5 +1,7 @@
 package com.mju.management.domain.todo.service;
 
+import com.mju.management.domain.project.infrastructure.Project;
+import com.mju.management.domain.project.infrastructure.ProjectRepository;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.domain.todo.infrastructure.ToDoJpaRepository;
 import com.mju.management.global.model.Exception.ExceptionList;
@@ -17,25 +19,38 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ToDoServiceServiceImpl implements ToDoService {
     private final ToDoJpaRepository toDoJpaRepository;
+    private final ProjectRepository projectRepository;
 
     @Override
     @Transactional
-    public void registerToDo(ToDoRegisterDto toDoRegisterDto) {
-        ToDoEntity toDoEntity = ToDoEntity.builder()
-                .todoContent(toDoRegisterDto.getTodoContent())
-                .build();
-        toDoJpaRepository.save(toDoEntity);
+    public void registerToDo(Long projectId, ToDoRegisterDto toDoRegisterDto) {
+        Optional<Project> optionalProject = projectRepository.findByProjectIndex(projectId);
+        if(optionalProject.isPresent()){
+            Project project = optionalProject.get();
+            ToDoEntity toDoEntity = ToDoEntity.builder()
+                    .todoContent(toDoRegisterDto.getTodoContent())
+                    .build();
+            project.registerToDo(toDoEntity);
+            toDoJpaRepository.save(toDoEntity);
+        } else {
+            throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
+        }
     }
 
     @Override
     @Transactional
-    public List<ToDoEntity> getToDo() {
-        Sort sort = Sort.by(Sort.Order.asc("isChecked"));
-        List<ToDoEntity> toDoEntity =  toDoJpaRepository.findAll(sort);
-        if (!toDoEntity.isEmpty()) {
-            return toDoEntity;
-        }else {
-            throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
+    public List<ToDoEntity> getToDo(Long projectId) {
+        Optional<Project> optionalProject = projectRepository.findByProjectIndex(projectId);
+        if(optionalProject.isPresent()) {
+            Sort sort = Sort.by(Sort.Order.asc("isChecked"));
+            List<ToDoEntity> toDoEntity = toDoJpaRepository.findAll(sort);
+            if (!toDoEntity.isEmpty()) {
+                return toDoEntity;
+            } else {
+                throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
+            }
+        } else {
+            throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
         }
     }
 

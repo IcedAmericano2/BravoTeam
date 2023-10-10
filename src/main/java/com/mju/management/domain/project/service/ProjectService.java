@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    public void registerProject(ProjectRegisterDto projectRegisterDto);
+    public void registerProject(/*String userId,*/ ProjectRegisterDto projectRegisterDto);
 
     public List<Project> getProject();
 

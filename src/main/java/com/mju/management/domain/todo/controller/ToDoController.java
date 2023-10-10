@@ -27,18 +27,18 @@ public class ToDoController {
     }
 
     //체크박스 등록
-    @PostMapping()
+    @PostMapping("/projects/{projectId}/todo")
     @Operation(summary = "할일 등록", description = "할일 등록 api")
-    public CommonResult registerToDo(@RequestBody ToDoRegisterDto toDoRegisterDto){
-        toDoService.registerToDo(toDoRegisterDto);
+    public CommonResult registerToDo(@PathVariable Long projectId, @RequestBody ToDoRegisterDto toDoRegisterDto){
+        toDoService.registerToDo(projectId, toDoRegisterDto);
         return responseService.getSuccessfulResult();
     }
 
     //체크박스 전체 조회
-    @GetMapping()
+    @GetMapping("/projects/{projectId}/todo")
     @Operation(summary = "할일 조회", description = "할일 조회 api")
-    public CommonResult showToDo() {
-        List<ToDoEntity> toDoEntity = toDoService.getToDo();
+    public CommonResult showToDo(@PathVariable Long projectId) {
+        List<ToDoEntity> toDoEntity = toDoService.getToDo(projectId);
         CommonResult commonResult = responseService.getListResult(toDoEntity);
         return commonResult;
     }

@@ -19,9 +19,10 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void registerProject(ProjectRegisterDto projectRegisterDto) {
+    public void registerProject(/*String userId, */ProjectRegisterDto projectRegisterDto) {
         Project project = Project.builder()
                 .name(projectRegisterDto.getName())
+//                .user_id(userId)
                 .description(projectRegisterDto.getDescription())
                 .sDate(projectRegisterDto.getSDate())
                 .fDate(projectRegisterDto.getFDate())

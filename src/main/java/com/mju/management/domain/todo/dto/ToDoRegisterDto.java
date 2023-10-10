@@ -8,6 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ToDoRegisterDto {
 
+    private Long projectId;
+    private Long todoId;
+
     @Schema(description = "할일 내용", defaultValue = "오늘 할일 완료")
     private String todoContent;
 
