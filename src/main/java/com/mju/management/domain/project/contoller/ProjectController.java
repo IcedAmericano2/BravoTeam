@@ -2,7 +2,6 @@ package com.mju.management.domain.project.contoller;
 
 import com.mju.management.domain.project.service.ProjectService;
 import com.mju.management.domain.project.infrastructure.Project;
-import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
 import com.mju.management.domain.project.dto.ProjectRegisterDto;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/project")
 @Tag(name = "프로젝트 CRUD API", description = "프로젝트 CRUD API")
@@ -22,8 +22,8 @@ public class ProjectController {
     ProjectService projectService;
     @Autowired
     ResponseService responseService;
-    @Autowired
-    UserServiceImpl userService;
+//    @Autowired
+//    UserServiceImpl userService;
 
     @GetMapping("/ping")
     @Operation(summary = "Ping 테스트", description = "서버 피드백 확인용")
@@ -50,14 +50,18 @@ public class ProjectController {
     //프로젝트 수정
     @PutMapping("/{projectIndex}")
     @Operation(summary = "프로젝트 수정하기", description = "기존 프로젝트를 수정하는 API")
-    public CommonResult updateProject(@PathVariable Long projectIndex, @RequestBody ProjectRegisterDto projectRegisterDto){
+    public CommonResult updateProject(@PathVariable Long projectIndex, @RequestBody ProjectRegisterDto projectRegisterDto/*, HttpServletRequest request*/){
+//        String userId = userService.getUserId(request);
+//        userService.checkUsetType(userId, "");
         projectService.updateProject(projectIndex, projectRegisterDto);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 삭제
     @DeleteMapping("/{projectIndex}")
     @Operation(summary = "프로젝트 삭제하기", description = "프로젝트를 삭제하는 API")
-    public CommonResult deleteProject(@PathVariable Long projectIndex){
+    public CommonResult deleteProject(@PathVariable Long projectIndex/*, HttpServletRequest request*/){
+//        String userId = userService.getuserId(request);
+//        userService.checkUserType(userId, "");
         projectService.deleteProject(projectIndex);
         return responseService.getSuccessfulResult();
     }
