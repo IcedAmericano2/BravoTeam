@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PostService {
+public class PostServiceImpl {
 
     private final PostRepository postRepository;
     private final ProjectRepository projectRepository;
@@ -125,4 +125,5 @@ public class PostService {
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
     }
+
 }
