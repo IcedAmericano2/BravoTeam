@@ -34,7 +34,7 @@ jobs:
         
     # github secret 환경변수로 적어둔 APPLICATION_YML으로 application.yml파일을 생성합니다.
     # 환경변수가 지나치게 많아짐을 방지하기 위해 APPLICATION_YML 변수를 만들었습니다.
-    - name: make application-prod.yml
+    - name: make application.yml
       run: |
         cd ./src/main/resources
         touch ./application.yml
@@ -60,7 +60,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
  
       # EC2에 접속하고 배포합니다.
-    - name: Deploy to Prod WAS Server
+    - name: Deploy
       uses: appleboy/ssh-action@master
       with:
           host: ${{ secrets.EC2_HOST }}
@@ -69,7 +69,8 @@ jobs:
           port: ${{ secrets.EC2_SSH_PORT }}
 
           script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker rm -f $(sudo docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker image prune -f
+            docker stop $(docker ps -a -q)
+            docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            docker rm $(docker ps --filter 'status=exited' -a -q)
+            docker image prune -a -f
