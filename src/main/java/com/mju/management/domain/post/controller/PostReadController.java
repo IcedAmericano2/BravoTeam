@@ -22,7 +22,7 @@ public class PostReadController {
     private final ResponseService responseService;
 
     // 전체 조희 + 페이징
-    @Operation(summary = "기획/제작/편집 게시글 전체 조회 API (category : planning, production, editing)")
+    @Operation(summary = "기획/제작/편집 게시글 전체 조회 API (category : PLANNING, PRODUCTION, EDITING)")
     @GetMapping("/all")
     public CommonResult readPosts(@RequestParam("category") String category
             /* @AuthenticationPrincipal User user */){

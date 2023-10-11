@@ -26,3 +26,5 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://52.78.155.253:8761/eureka
+server:
+  port: 0
