@@ -1,11 +1,11 @@
 spring:
   config:
     activate:
-      on-profile: prod
   application:
     name: api
 
   datasource:
+      on-profile: prod
     url: ENC(vK3ggYCmRnJlODS6cbBXJAi+7Mw7qpO3mKVnWz9PV+Mi+aQrVJBY++5ecNXwrnQxgbCgoivoVVDJjDe554GHnyoj8f2rUbkyNbgN/QmNAZa+Cc+Gp1x7huLrQD7BCeLC)
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(Oywg8yRSKPs0TXgE6rbNaA==)
@@ -26,7 +26,7 @@ spring:
       register-with-eureka: true
       fetch-registry: true
       service-url:
-        defaultZone: http://localhost:8761/eureka
+        defaultZone: http://52.78.155.253:8761/eureka
 
   server:
-    port: 8081
+    port: 8080
