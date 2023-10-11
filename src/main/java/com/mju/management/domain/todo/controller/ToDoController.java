@@ -14,6 +14,7 @@ import java.util.List;
 @Tag(name = "체크리스트 CRUD API", description = "체크리스트(할일) 관련 API")
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class ToDoController {
     @Autowired
     ToDoService toDoService;

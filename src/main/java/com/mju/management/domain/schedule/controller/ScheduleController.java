@@ -1,11 +1,10 @@
 package com.mju.management.domain.schedule.controller;
 
+import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.dto.response.GetScheduleResponseDto;
-import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.domain.schedule.service.ScheduleService;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
-import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,6 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class ScheduleController {
     private final ScheduleService scheduleService;
     private final ResponseService responseService;
