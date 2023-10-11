@@ -31,48 +31,47 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-
-    # Gradle Build를 위한 권한 부여
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    # Gradle Build (test 제외)
-    - name: Build with Gradle
-      run: ./gradlew clean build --exclude-task test
-
+        
+    # github secret 환경변수로 적어둔 APPLICATION_YML으로 application.yml파일을 생성합니다.
+    # 환경변수가 지나치게 많아짐을 방지하기 위해 APPLICATION_YML 변수를 만들었습니다.
+    - name: make application-prod.yml
+      run: |
+        cd ./src/main/resources
+        touch ./application.yml
+        echo "${{ secrets.APPLICATION_YML }}" >> ./application.yml
+      shell: bash
       
-    # DockerHub 로그인
-    - name: DockerHub Login
-      uses: docker/login-action@v2
+    # gradlew에 실행 권한을 부여합니다.
+    - name: Grant execute permisson for gradlew
+      run: chmod +x gradlew
+ 
+      # test는 CI 과정에서 수행되므로 여기서는 `-x`로 테스트를 생략했습니다.
+      # `--stacktrace`로 더 자세한 로그가 출력되게 해줍니다.
+    - name: Build with Gradle (without Test)
+      run: ./gradlew clean build -x test --stacktrace
+ 
+      # docker hub에 로그인하고 이미지를 빌드합니다. 이후에 push를 진행합니다.
+      # docker_username을 적지 않으면 push 시에 요청이 거부될 수 있습니다.
+    - name: Docker Hub build & push
+      run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          docker images
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+ 
+      # EC2에 접속하고 배포합니다.
+    - name: Deploy to Prod WAS Server
+      uses: appleboy/ssh-action@master
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    # Docker 이미지 빌드
-    - name: Docker Image Build
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }} .
-
-    # DockerHub Push
-    - name: DockerHub Push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-
-    # EC2 인스턴스 접속 및 애플리케이션 실행
-    - name: Application Run
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_KEY }}
-
-        script: |
-          sudo docker kill ${{ secrets.PROJECT_NAME }}
-          sudo docker rm -f ${{ secrets.PROJECT_NAME }}
-          sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-
-          sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
-          --name ${{ secrets.PROJECT_NAME }} \
-          -e SPRING_DATASOURCE_URL=${{ secrets.DB_URL }} \
-          -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
-          -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
-          -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          # docker-compose가 있는 디렉토리로 이동해야 수행됩니다.
+          script: |
+            cd /home/ubuntu/Mocacong-Backend/
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            sudo docker-compose up -d
+            sudo docker image prune -f
