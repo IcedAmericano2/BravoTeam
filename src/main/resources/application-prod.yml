@@ -1,15 +1,15 @@
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: prod
   application:
     name: api
 
   datasource:
-    url: jdbc:mysql://localhost:33061/iceAmericano
+    url: ENC(vK3ggYCmRnJlODS6cbBXJAi+7Mw7qpO3mKVnWz9PV+Mi+aQrVJBY++5ecNXwrnQxgbCgoivoVVDJjDe554GHnyoj8f2rUbkyNbgN/QmNAZa+Cc+Gp1x7huLrQD7BCeLC)
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: iceAmericano
+    username: ENC(Oywg8yRSKPs0TXgE6rbNaA==)
+    password: ENC(R6oW03mOpylO0Fj2BJzvOeMuCiLGT568)
 
   jpa:
     hibernate:
