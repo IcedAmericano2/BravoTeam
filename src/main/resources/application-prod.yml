@@ -29,4 +29,4 @@ spring:
         defaultZone: http://52.78.155.253:8761/eureka
 
   server:
-    port: 8080
+    port: 9000
