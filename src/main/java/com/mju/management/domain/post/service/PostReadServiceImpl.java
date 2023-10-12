@@ -28,13 +28,13 @@ public class PostReadServiceImpl implements PostReadService {
 
         Category getCategory = null;
         switch (category) {
-            case "planning":
+            case "PLANNING":
                 getCategory = Category.PLANNING;
                 break;
-            case "production":
+            case "PRODUCTION":
                 getCategory = Category.PRODUCTION;
                 break;
-            case "editing":
+            case "EDITING":
                 getCategory = Category.EDITING;
                 break;
             default:
