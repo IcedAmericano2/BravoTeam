@@ -4,6 +4,7 @@ import static com.mju.management.global.model.Exception.ExceptionList.*;
 
 import java.util.Optional;
 
+import com.mju.management.domain.post.controller.response.PostDetailResponse;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.PostRepository;
 import com.mju.management.domain.post.model.dto.request.CreatePostRequestServiceDto;
@@ -69,7 +70,7 @@ public class PostServiceImpl {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(post);
+        return responseService.getSingleResult(PostDetailResponse.from(post));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {

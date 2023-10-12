@@ -24,10 +24,19 @@ public class PostReadController {
     // 전체 조희 + 페이징
     @Operation(summary = "기획/제작/편집 게시글 전체 조회 API (category : PLANNING, PRODUCTION, EDITING)")
     @GetMapping("/all")
-    public CommonResult readPosts(@RequestParam("category") String category
+    public CommonResult readAll(@RequestParam("category") String category
             /* @AuthenticationPrincipal User user */){
         long userId = 1L;
-        List<PostResponse> responseList = postReadService.readPosts(userId, category);
+        List<PostResponse> responseList = postReadService.readAll(userId, category);
+        return responseService.getListResult(responseList);
+    }
+
+    @Operation(summary = "기획/제작/편집 게시글 상위 3개 조회 API (category : PLANNING, PRODUCTION, EDITING)")
+    @GetMapping("/recent")
+    public CommonResult readThree(@RequestParam("category") String category
+            /* @AuthenticationPrincipal User user */){
+        long userId = 1L;
+        List<PostResponse> responseList = postReadService.readThree(userId, category);
         return responseService.getListResult(responseList);
     }
 
