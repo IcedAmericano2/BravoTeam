@@ -36,9 +36,10 @@ public enum ExceptionList {
 
     // POST
     INVALID_POST_ID(5013, "요청으로 들어온 Post의 식별자가 유효하지 않습니다."),
-    NO_PERMISSION_TO_EDIT_POST(5014, "게시글 수정 권한이 없습니다.");
+    NO_PERMISSION_TO_EDIT_POST(5014, "게시글 수정 권한이 없습니다."),
 
-
+    // Comment
+    NON_EXISTENT_COMMENT(5020, "존재하지 않는 댓글입니다.");
 
 
 
