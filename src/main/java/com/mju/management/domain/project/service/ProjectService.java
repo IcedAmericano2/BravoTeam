@@ -1,19 +1,19 @@
 package com.mju.management.domain.project.service;
 
-import com.mju.management.domain.project.dto.ProjectRegisterDto;
-import com.mju.management.domain.project.infrastructure.Project;
+import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
+import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
 
 import java.util.List;
 
 public interface ProjectService {
 
-    public void registerProject(ProjectRegisterDto projectRegisterDto);
+    public void registerProject(ProjectRegisterRequestDto projectRegisterRequestDto);
 
-    public List<Project> getProject();
+    public List<GetProjectResponseDto> getProjectList();
 
     public void deleteProject(Long projectIndex);
 
-    public void updateProject(Long projectIndex, ProjectRegisterDto projectRegisterDto);
+    public void updateProject(Long projectIndex, ProjectRegisterRequestDto projectRegisterRequestDto);
 
     public void finishProject(Long projectIndex);
 }
