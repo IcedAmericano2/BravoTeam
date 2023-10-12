@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface PostReadService {
 
-    List<PostResponse> readPosts(long userId, String category);
+    List<PostResponse> readAll(long userId, String category);
+
+    List<PostResponse> readThree(long userId, String category);
 
 }
