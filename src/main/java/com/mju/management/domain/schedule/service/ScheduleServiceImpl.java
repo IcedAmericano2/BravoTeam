@@ -74,7 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         LocalDate endDate = createScheduleRequestDto.readEndDateAsLocalDateType();
         if(startDate.isAfter(endDate))
             throw new StartDateAfterEndDateException(ExceptionList.START_DATE_AFTER_END_DATE_EXCEPTION);
-        if(startDate.isBefore(project.getSDate()) || endDate.isAfter(project.getFDate()))
+        if(startDate.isBefore(project.getStartDate()) || endDate.isAfter(project.getFinishDate()))
             throw new OutOfProjectScheduleRangeException(ExceptionList.OUT_OF_PROJECT_SCHEDULE_RANGE);
     }
 }
