@@ -4,6 +4,7 @@ import static com.mju.management.global.model.Exception.ExceptionList.*;
 
 import java.util.Optional;
 
+import com.mju.management.domain.post.controller.response.PostDetailResponse;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.PostRepository;
 import com.mju.management.domain.post.model.dto.request.CreatePostRequestServiceDto;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PostService {
+public class PostServiceImpl {
 
     private final PostRepository postRepository;
     private final ProjectRepository projectRepository;
@@ -69,7 +70,7 @@ public class PostService {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(post);
+        return responseService.getSingleResult(PostDetailResponse.from(post));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
@@ -125,4 +126,5 @@ public class PostService {
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
     }
+
 }

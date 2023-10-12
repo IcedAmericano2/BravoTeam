@@ -1,7 +1,12 @@
 package com.mju.management.domain.post.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.mju.management.domain.comment.domain.Comment;
+import com.mju.management.domain.comment.infrastructure.CommentEntity;
+import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,16 +16,6 @@ import com.mju.management.domain.post.infrastructure.Category;
 import com.mju.management.domain.post.model.dto.request.UpdatePostRequestServiceDto;
 import com.mju.management.domain.project.infrastructure.Project;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,6 +55,9 @@ public class Post {
 	@JoinColumn(name = "project_index")
 	@JsonIgnore
 	private Project project;
+
+	@OneToMany(mappedBy = "post")
+	private List<CommentEntity> commentList = new ArrayList<>();
 
 	// TODO : User 기능 추가되면 User writer 필드 추가
 	@Builder
