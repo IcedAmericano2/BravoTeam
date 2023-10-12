@@ -1,6 +1,7 @@
 package com.mju.management.domain.post.controller.response;
 
 import com.mju.management.domain.post.domain.Post;
+import com.mju.management.domain.post.infrastructure.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,9 @@ public class PostDetailResponse {
     @Schema(description = "댓글 갯수")
     private long commentSum;
 
+    @Schema(description = "카테고리")
+    Category category;
+
     public static PostDetailResponse from(Post post){
 
         return PostDetailResponse.builder()
@@ -46,6 +50,7 @@ public class PostDetailResponse {
 //                .userName()
                 .startDate(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss")))
                 .commentSum(post.getCommentList().size())
+                .category(post.getCategory())
                 .build();
     }
 }
