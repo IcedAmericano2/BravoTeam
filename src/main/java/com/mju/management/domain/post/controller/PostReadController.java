@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "게시글 읽기")
+@Tag(name = "[기획/제작/편집] 게시글 조회 API")
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor

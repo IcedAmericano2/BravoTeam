@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,7 @@ public class PostResponse {
     @Schema(description = "게시글 id")
     private Long id;
 
-    @Schema(description = "진행현황")
+    @Schema(description = "진행 현황 (완료 : true, 진행 중 : false")
     private boolean status;
 
     @Schema(description = "게시글 제목")
@@ -25,16 +27,21 @@ public class PostResponse {
     @Schema(description = "작성자")
     private String userName;
 
-    @Schema(description = "시작일")
+    @Schema(description = "시작일 (2023.09.16 11:11)")
     private String startDate;
 
+    @Schema(description = "댓글 갯수")
+    private long commentSum;
+
     public static PostResponse from(Post post){
+
         return PostResponse.builder()
                 .id(post.getId())
 //                .status()
                 .title(post.getTitle())
 //                .userName()
-//                .startDate()
+                .startDate(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss")))
+                .commentSum(post.getCommentList().size())
                 .build();
     }
 }
