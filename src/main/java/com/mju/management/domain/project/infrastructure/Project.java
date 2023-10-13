@@ -1,7 +1,9 @@
 package com.mju.management.domain.project.infrastructure;
 
+import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
+import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +12,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mju.management.domain.post.domain.Post;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -56,6 +56,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
     private List<Schedule> scheduleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
+    private List<ToDoEntity> todoList = new ArrayList<>();
 
     public void createPost(Post post){
         this.postList.add(post);
