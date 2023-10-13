@@ -36,9 +36,9 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public List<GetScheduleResponseDto> getScheduleList(Long projectId) {
-        Project project = projectRepository.findById(projectId)
+        Project project = projectRepository.findByIdWithScheduleList(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        List<GetScheduleResponseDto> scheduleList = scheduleRepository.findAllByProject(project)
+        List<GetScheduleResponseDto> scheduleList = project.getScheduleList()
                 .stream()
                 .map(schedule -> GetScheduleResponseDto.from(schedule))
                 .collect(Collectors.toList());
