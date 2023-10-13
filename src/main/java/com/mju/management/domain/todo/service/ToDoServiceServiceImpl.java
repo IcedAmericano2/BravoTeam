@@ -45,7 +45,7 @@ public class ToDoServiceServiceImpl implements ToDoService {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-            List<ToDoEntity> toDoEntity = toDoJpaRepository.findByProjectOrderByIsCheckedAsc(project);
+            List<ToDoEntity> toDoEntity = toDoJpaRepository.findByProjectAndOrderByConditions(project);
 
             if (!toDoEntity.isEmpty()) {
                 return toDoEntity;
