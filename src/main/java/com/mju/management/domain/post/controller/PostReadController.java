@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "[기획/제작/편집] 게시글 조회 API")
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/project")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class PostReadController {
@@ -23,20 +23,21 @@ public class PostReadController {
 
     // 전체 조희 + 페이징
     @Operation(summary = "기획/제작/편집 게시글 전체 조회 API (category : PLANNING, PRODUCTION, EDITING)")
-    @GetMapping("/all")
-    public CommonResult readAll(@RequestParam("category") String category
-            /* @AuthenticationPrincipal User user */){
+    @GetMapping("/{projectId}/posts/all")
+    public CommonResult readAll(@RequestParam("category") String category,
+            /* @AuthenticationPrincipal User user */@PathVariable Long projectId){
         long userId = 1L;
-        List<PostResponse> responseList = postReadService.readAll(userId, category);
+        List<PostResponse> responseList = postReadService.readAll(projectId, userId, category);
         return responseService.getListResult(responseList);
     }
 
     @Operation(summary = "기획/제작/편집 게시글 상위 3개 조회 API (category : PLANNING, PRODUCTION, EDITING)")
-    @GetMapping("/recent")
-    public CommonResult readThree(@RequestParam("category") String category
+    @GetMapping("/{projectId}/posts/recent")
+    public CommonResult readThree(@PathVariable Long projectId,
+                                  @RequestParam("category") String category
             /* @AuthenticationPrincipal User user */){
         long userId = 1L;
-        List<PostResponse> responseList = postReadService.readThree(userId, category);
+        List<PostResponse> responseList = postReadService.readThree(projectId, userId, category);
         return responseService.getListResult(responseList);
     }
 
