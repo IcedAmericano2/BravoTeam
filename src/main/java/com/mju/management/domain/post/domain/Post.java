@@ -56,7 +56,7 @@ public class Post {
 	@JsonIgnore
 	private Project project;
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
 	private List<CommentEntity> commentList = new ArrayList<>();
 
 	// TODO : User 기능 추가되면 User writer 필드 추가
