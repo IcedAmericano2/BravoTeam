@@ -5,7 +5,10 @@ import com.mju.management.domain.post.controller.response.PostResponse;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.Category;
 import com.mju.management.domain.post.infrastructure.PostRepository;
+import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.infrastructure.ProjectRepository;
+import com.mju.management.global.model.Exception.ExceptionList;
+import com.mju.management.global.model.Exception.NonExistentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +25,16 @@ import java.util.List;
 public class PostReadServiceImpl implements PostReadService {
 
     private final PostRepository postRepository;
+    private final ProjectRepository projectRepository;
 
     @Override
-    public List<PostResponse> readAll(long userId, String category) {
+    public List<PostResponse> readAll(long projectId, long userId, String category) {
         /**유저 추가해야 함*/
         Category getCategory = getCategory(category);
-        List<Post> postList = postRepository.findByCategory(getCategory);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
+
+        List<Post> postList = postRepository.findByCategoryAndProject(getCategory, project);
         List<PostResponse> postResponseList = new ArrayList<>();
         postList.forEach(post->{
             postResponseList.add(PostResponse.from(post));
@@ -36,13 +43,15 @@ public class PostReadServiceImpl implements PostReadService {
     }
 
     @Override
-    public List<PostResponse> readThree(long userId, String category) {
+    public List<PostResponse> readThree(long projectId, long userId, String category) {
         /**유저 추가해야 함*/
-
         Category getCategory = getCategory(category);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
+
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); // "createdAt" 필드를 기준으로 내림차순 정렬
         Pageable pageable = PageRequest.of(0, 3, sort); // 페이지 번호 0부터 3개의 결과를 가져옴
-        List<Post> postList =  postRepository.findByCategory(getCategory, pageable);
+        List<Post> postList =  postRepository.findByCategoryAndProject(getCategory,project, pageable);
         List<PostResponse> postResponseList = new ArrayList<>();
         postList.forEach(post->{
             postResponseList.add(PostResponse.from(post));
@@ -63,7 +72,7 @@ public class PostReadServiceImpl implements PostReadService {
                 getCategory = Category.EDITING;
                 break;
             default:
-                /** 예외 처리 */
+                new NonExistentException(ExceptionList.NON_EXISTENT_CATEGORY);
         }
         return getCategory;
     }

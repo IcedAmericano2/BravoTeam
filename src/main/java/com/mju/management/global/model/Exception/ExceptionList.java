@@ -39,9 +39,9 @@ public enum ExceptionList {
     NO_PERMISSION_TO_EDIT_POST(5014, "게시글 수정 권한이 없습니다."),
 
     // Comment
-    NON_EXISTENT_COMMENT(5020, "존재하지 않는 댓글입니다.");
+    NON_EXISTENT_COMMENT(5020, "존재하지 않는 댓글입니다."),
 
-
+    NON_EXISTENT_CATEGORY(5021, "존재하지 않는 카테고리입니다.");
 
     private final int code;
     private final String message;
