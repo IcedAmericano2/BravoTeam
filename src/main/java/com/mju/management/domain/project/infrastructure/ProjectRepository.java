@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 	Optional<Project> findByProjectIndex(Long projectId);
 
-	@Query("select p from Project p join fetch p.scheduleList where p.projectIndex = :projectId")
+	@Query("select p from Project p left join fetch p.scheduleList where p.projectIndex = :projectId")
 	Optional<Project> findByIdWithScheduleList(@Param("projectId") Long projectId);
 }
