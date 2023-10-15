@@ -1,5 +1,6 @@
 package com.mju.management.domain.todo.infrastructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mju.management.domain.project.infrastructure.Project;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -23,8 +24,9 @@ public class ToDoEntity {
     @Column(name = "todo_index")
     private Long todoIndex;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
     private Project project;
 
     @Column(name = "todo_content")
