@@ -60,6 +60,9 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
     private List<ToDoEntity> todoList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
+    private List<ProjectUser> projectUserList= new ArrayList<>();
+
     public void createPost(Post post){
         this.postList.add(post);
         post.setProject(this);
