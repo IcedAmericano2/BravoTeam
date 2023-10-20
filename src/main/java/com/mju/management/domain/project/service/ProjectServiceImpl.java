@@ -1,10 +1,9 @@
 package com.mju.management.domain.project.service;
 
 import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
+import com.mju.management.domain.project.infrastructure.*;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
-import com.mju.management.domain.project.infrastructure.ProjectRepository;
-import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
 import com.mju.management.global.model.Exception.StartDateAfterEndDateException;
 import jakarta.transaction.Transactional;
@@ -12,20 +11,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
+    private final ProjectUserRepository projectUserRepository;
 
     @Override
     @Transactional
     public void registerProject(ProjectRegisterRequestDto projectRegisterRequestDto) {
         validateProjectPeriod(projectRegisterRequestDto);
-        projectRepository.save(projectRegisterRequestDto.toEntity());
+        Project project = projectRepository.save(projectRegisterRequestDto.toEntity());
+        Set<Long> memberIdList = projectRegisterRequestDto.getMemberIdList();
+        List<ProjectUser> memberList = new ArrayList<>();
+        for(Long memberId : memberIdList)
+            memberList.add(ProjectUser.builder()
+                    .project(project)
+                    .userId(memberId)
+                    .role(Role.MEMBER)
+                    .build());
+        //ToDo : 토큰으로부터 요청자의 아이디를 뽑아서 ProjectUser 테이블에 LEADER로 저장할 것
+        projectUserRepository.saveAll(memberList);
     }
 
     @Override
