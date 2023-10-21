@@ -78,4 +78,12 @@ public class Project {
     public void finish() {
         this.isChecked = true;
     }
+
+    public List<Long> getMemberIdList(){
+        List<Long> memberIdList = new ArrayList<>();
+        for (ProjectUser projectUser : projectUserList)
+            if(projectUser.getRole() == Role.MEMBER)
+                memberIdList.add(projectUser.getUserId());
+        return memberIdList;
+    }
 }

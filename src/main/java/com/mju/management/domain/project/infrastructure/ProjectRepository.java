@@ -13,4 +13,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("select p from Project p left join fetch p.scheduleList where p.projectIndex = :projectId")
 	Optional<Project> findByIdWithScheduleList(@Param("projectId") Long projectId);
+
+	@Query("select p from Project p left join fetch p.projectUserList where p.projectIndex = :projectId")
+	Optional<Project> findByIdWithProjectUserList(@Param("projectId") Long projectId);
+
 }
