@@ -5,12 +5,17 @@ import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.InvalidDateFormatException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +39,9 @@ public class ProjectRegisterRequestDto {
     @NotBlank(message = "프로젝트 종료일을 입력해주세요.")
     @Schema(description = "프로젝트 종료일", defaultValue = "2023-12-15")
     private String finishDate;
+
+    @Schema(description = "프로젝트 팀원 아이디 목록", defaultValue = "[2, 3, 4]")
+    private Set<Long> memberIdList = new HashSet<Long>();
 
     public Project toEntity(){
         return Project.builder()

@@ -34,7 +34,7 @@ public class PostServiceImpl {
     // private final UserRepository userRepository;
 
 	public CommonResult createPost(/* User writer, */ CreatePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -53,7 +53,7 @@ public class PostServiceImpl {
 
     @Transactional(readOnly = true)
     public CommonResult retrieveDetailPost(/* User user, */ RetrieveDetailPostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -74,7 +74,7 @@ public class PostServiceImpl {
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -101,7 +101,7 @@ public class PostServiceImpl {
     }
 
     public CommonResult deletePost(DeletePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }

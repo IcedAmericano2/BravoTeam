@@ -41,7 +41,20 @@ public enum ExceptionList {
     // Comment
     NON_EXISTENT_COMMENT(5020, "존재하지 않는 댓글입니다."),
 
-    NON_EXISTENT_CATEGORY(5021, "존재하지 않는 카테고리입니다.");
+    NON_EXISTENT_CATEGORY(5021, "존재하지 않는 카테고리입니다."),
+
+    // Jwt
+    NULL_JWT_TOKEN(7000, "토큰이 존재하지 않습니다."),
+    EXPIRED_JWT(7001, "만료된 토큰입니다."),
+    PREMATURE_JWT(7002, "아직 활성화되지 않은 토큰입니다."),
+    UNSUPPORTED_JWT(7003, "지원되지 않는 토큰 형식 또는 구조입니다."),
+    MALFORMED_JWT(7004, "토큰의 형식이 잘못되었습니다."),
+    SIGNATURE_JWT(7005, "토큰의 서명이 검증되지 않았습니다."),
+    ILLEGAL_ARGUMENT_JWT(7006, "잘못된 인자가 전달되었습니다."),
+    SECURITY_JWT(7007, "보안 관련 문제로 토큰 검증이 실패했습니다."),
+
+    // 권한
+    UNAUTHORIZED_ACCESS(8000, "접근 권한이 없습니다.");
 
     private final int code;
     private final String message;

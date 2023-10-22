@@ -4,14 +4,13 @@ package com.mju.management.domain.schedule.service;
 
 import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.infrastructure.ProjectRepository;
+import com.mju.management.domain.project.infrastructure.ProjectUserRepository;
 import com.mju.management.domain.schedule.dto.response.GetScheduleResponseDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
-import com.mju.management.global.model.Exception.ExceptionList;
-import com.mju.management.global.model.Exception.StartDateAfterEndDateException;
-import com.mju.management.global.model.Exception.NonExistentException;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
+import com.mju.management.global.model.Exception.*;
 import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.infrastructure.ScheduleRepository;
-import com.mju.management.global.model.Exception.OutOfProjectScheduleRangeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,20 +24,25 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService{
     private final ScheduleRepository scheduleRepository;
     private final ProjectRepository projectRepository;
+    private final ProjectUserRepository projectUserRepository;
 
     @Override
     public void createSchedule(Long projectId, CreateScheduleRequestDto createScheduleRequestDto) {
-        Project project = projectRepository.findById(projectId)
+        Project project = projectRepository.findByIdWithProjectUserList(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
+        if(!project.isLeaderOrMember(JwtContextHolder.getUserId()))
+            throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
         validateSchedule(createScheduleRequestDto, project);
         scheduleRepository.save(createScheduleRequestDto.toEntity(project));
     }
 
     @Override
     public List<GetScheduleResponseDto> getScheduleList(Long projectId) {
-        Project project = projectRepository.findById(projectId)
+        Project project = projectRepository.findByIdWithScheduleList(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        List<GetScheduleResponseDto> scheduleList = scheduleRepository.findAllByProject(project)
+        projectUserRepository.findByProjectAndUserId(project, JwtContextHolder.getUserId())
+                .orElseThrow(() -> new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS));
+        List<GetScheduleResponseDto> scheduleList = project.getScheduleList()
                 .stream()
                 .map(schedule -> GetScheduleResponseDto.from(schedule))
                 .collect(Collectors.toList());
@@ -50,6 +54,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     public GetScheduleResponseDto getSchedule(Long scheduleId) {
         Schedule schedule =  scheduleRepository.findById(scheduleId)
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
+        projectUserRepository.findByProjectAndUserId(schedule.getProject(), JwtContextHolder.getUserId())
+                .orElseThrow(() -> new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS));
         return GetScheduleResponseDto.from(schedule);
     }
 
@@ -58,6 +64,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void updateSchedule(Long scheduleId, CreateScheduleRequestDto updateScheduleRequestDto) {
         Schedule schedule =  scheduleRepository.findByIdWithProject(scheduleId)
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
+        projectUserRepository.findByProjectAndUserId(schedule.getProject(), JwtContextHolder.getUserId())
+                .orElseThrow(() -> new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS));
         validateSchedule(updateScheduleRequestDto, schedule.getProject());
         schedule.update(updateScheduleRequestDto);
     }
@@ -66,6 +74,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void deleteSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_SCHEDULE));
+        projectUserRepository.findByProjectAndUserId(schedule.getProject(), JwtContextHolder.getUserId())
+                .orElseThrow(() -> new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS));
         scheduleRepository.delete(schedule);
     }
 

@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -31,9 +33,9 @@ public class Project {
     }
 
     @Id
-    @Column(name = "project_index")
+    @Column(name = "project_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectIndex;
+    private Long projectId;
 
     @Column(name = "project_name")
     private String name;
@@ -60,6 +62,9 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
     private List<ToDoEntity> todoList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", cascade = ALL, orphanRemoval = true)
+    private List<ProjectUser> projectUserList= new ArrayList<>();
+
     public void createPost(Post post){
         this.postList.add(post);
         post.setProject(this);
@@ -74,5 +79,27 @@ public class Project {
 
     public void finish() {
         this.isChecked = true;
+    }
+
+    public Set<Long> getMemberIdList(){
+        Set<Long> memberIdList = new HashSet<>();
+        for (ProjectUser projectUser : projectUserList)
+            if(projectUser.getRole() == Role.MEMBER)
+                memberIdList.add(projectUser.getUserId());
+        return memberIdList;
+    }
+
+    public boolean isLeader(Long userId) {
+        for(ProjectUser projectUser : projectUserList)
+            if(projectUser.getUserId()==userId && projectUser.getRole()==Role.LEADER)
+                return true;
+        return  false;
+    }
+
+    public boolean isLeaderOrMember(Long userId){
+        for(ProjectUser projectUser : projectUserList)
+            if(projectUser.getUserId() == userId)
+                return true;
+        return  false;
     }
 }
