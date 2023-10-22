@@ -1,5 +1,6 @@
 package com.mju.management.domain.project.contoller;
 
+import com.mju.management.domain.project.dto.response.GetProjectListResponseDto;
 import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
 import com.mju.management.domain.project.service.ProjectService;
 import com.mju.management.global.model.Result.CommonResult;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +40,18 @@ public class ProjectController {
     @Operation(summary = "프로젝트 전체목록 조회")
     @GetMapping()
     public CommonResult getProjectList() {
-        List<GetProjectResponseDto> projectList = projectService.getProjectList();
+        List<GetProjectListResponseDto> projectList = projectService.getProjectList();
         return responseService.getListResult(projectList);
     }
+
+    // 프로젝트 상세 조회
+    @Operation(summary = "프로젝트 상세 조회")
+    @GetMapping("/{projectIndex}")
+    public CommonResult getProject(@PathVariable Long projectIndex) {
+        GetProjectResponseDto project = projectService.getProject(projectIndex);
+        return responseService.getSingleResult(project);
+    }
+
     //프로젝트 수정
     @Operation(summary = "프로젝트 수정")
     @PutMapping("/{projectIndex}")
@@ -60,7 +69,7 @@ public class ProjectController {
     }
     //프로젝트 완료 표시
     @Operation(summary = "프로젝트 완료 표시")
-    @GetMapping("/{projectIndex}")
+    @PutMapping("/{projectIndex}/finish")
     public CommonResult finishCheckList(@PathVariable Long projectIndex){
         projectService.finishProject(projectIndex);
         return responseService.getSuccessfulResult();

@@ -1,8 +1,10 @@
 package com.mju.management.domain.project.infrastructure;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum Role {
     LEADER("팀장"),
     MEMBER("팀원");

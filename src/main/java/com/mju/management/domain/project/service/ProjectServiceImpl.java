@@ -1,7 +1,10 @@
 package com.mju.management.domain.project.service;
 
+import com.mju.management.domain.project.dto.response.GetProjectListResponseDto;
 import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
+import com.mju.management.domain.project.dto.response.GetProjectUserResponseDto;
 import com.mju.management.domain.project.infrastructure.*;
+import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
+    private final UserServiceImpl userService;
 
     @Override
     @Transactional
@@ -50,12 +54,23 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public List<GetProjectResponseDto> getProjectList(/*String requestUserId*/) {
-        List<GetProjectResponseDto> projectList = projectRepository.findAll()
-                .stream().map(GetProjectResponseDto::from)
+    public List<GetProjectListResponseDto> getProjectList(/*String requestUserId*/) {
+        List<GetProjectListResponseDto> projectList = projectRepository.findAll()
+                .stream().map(GetProjectListResponseDto::from)
                 .collect(Collectors.toList());
         if (projectList.isEmpty()) throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
         return projectList;
+    }
+
+    @Override
+    public GetProjectResponseDto getProject(Long projectIndex) {
+        Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
+                .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
+        if(!project.isLeaderOrMember(JwtContextHolder.getUserId()))
+            throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
+        List<GetProjectUserResponseDto> getProjectUserResponseDtoList =
+                userService.getProjectUserResponseDtoList(project.getProjectUserList());
+        return GetProjectResponseDto.from(project, getProjectUserResponseDtoList);
     }
 
     @Override
@@ -63,17 +78,17 @@ public class ProjectServiceImpl implements ProjectService{
     public void deleteProject(Long projectIndex) {
         Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        isLeader(project);
+        checkLeaderAuthorization(project);
         projectRepository.delete(project);
 
     }
 
     @Override
     @Transactional
-    public void updateProject(/*String requestUserId,*/ Long projectIndex, ProjectRegisterRequestDto projectUpdateRequestDto) {
+    public void updateProject(Long projectIndex, ProjectRegisterRequestDto projectUpdateRequestDto) {
         Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        isLeader(project);
+        checkLeaderAuthorization(project);
         validateProjectPeriod(projectUpdateRequestDto);
         project.update(projectUpdateRequestDto);
 
@@ -87,10 +102,10 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void finishProject(/*String requestUserId,*/ Long projectIndex) {
+    public void finishProject(Long projectIndex) {
         Project project = projectRepository.findById(projectIndex)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
-        isLeader(project);
+        checkLeaderAuthorization(project);
         project.finish();
 
     }
@@ -119,10 +134,11 @@ public class ProjectServiceImpl implements ProjectService{
     // 요청 dto에 없지만 db에는 있는 팀원을 삭제
     private void deleteProjectUser(Project project, Set<Long> requestMemberIdList) {
         project.getProjectUserList()
-                .removeIf(projectUser -> !requestMemberIdList.contains(projectUser.getUserId()));
+                .removeIf(projectUser -> projectUser.getRole() != Role.LEADER &&
+                        !requestMemberIdList.contains(projectUser.getUserId()));
     }
 
-    private void isLeader(Project project) {
+    private void checkLeaderAuthorization(Project project) {
         if(!project.isLeader(JwtContextHolder.getUserId()))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }

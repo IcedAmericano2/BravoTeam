@@ -7,14 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProjectResponseDto {
+public class GetProjectListResponseDto {
 
     private Long projectIndex;
     private String name;
@@ -22,17 +20,16 @@ public class GetProjectResponseDto {
     private LocalDate startDate;
     private LocalDate finishDate;
     private Boolean isFinished;
-    private List<GetProjectUserResponseDto> leaderAndMemberList;
 
-    public static GetProjectResponseDto from(Project project, List<GetProjectUserResponseDto> projectUserResponseDtoList){
-        return GetProjectResponseDto.builder()
+
+    public static GetProjectListResponseDto from(Project project){
+        return GetProjectListResponseDto.builder()
                 .projectIndex(project.getProjectIndex())
                 .name(project.getName())
                 .startDate(project.getStartDate())
                 .finishDate(project.getFinishDate())
                 .description(project.getDescription())
                 .isFinished(project.isChecked())
-                .leaderAndMemberList(projectUserResponseDtoList)
                 .build();
     }
 }
