@@ -40,7 +40,7 @@ public class ProjectRegisterRequestDto {
     @Schema(description = "프로젝트 종료일", defaultValue = "2023-12-15")
     private String finishDate;
 
-    @Schema(description = "프로젝트 팀원 아이디 목록", defaultValue = "[1, 2, 3]")
+    @Schema(description = "프로젝트 팀원 아이디 목록", defaultValue = "[2, 3, 4]")
     private Set<Long> memberIdList = new HashSet<Long>();
 
     public Project toEntity(){
