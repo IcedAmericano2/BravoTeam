@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class GetProjectListResponseDto {
 
-    private Long projectIndex;
+    private Long projectId;
     private String name;
     private String description;
     private LocalDate startDate;
@@ -24,7 +24,7 @@ public class GetProjectListResponseDto {
 
     public static GetProjectListResponseDto from(Project project){
         return GetProjectListResponseDto.builder()
-                .projectIndex(project.getProjectIndex())
+                .projectId(project.getProjectId())
                 .name(project.getName())
                 .startDate(project.getStartDate())
                 .finishDate(project.getFinishDate())

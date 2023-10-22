@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetProjectUserResponseDto {
-    private Long id;
+    private Long userId;
     private String name;
     private String email;
     private String phoneNumber;
@@ -20,7 +20,7 @@ public class GetProjectUserResponseDto {
 
     public static GetProjectUserResponseDto from(GetUserResponseDto getUserResponseDto, Role role){
         return GetProjectUserResponseDto.builder()
-                .id(getUserResponseDto.getId())
+                .userId(getUserResponseDto.getId())
                 .name(getUserResponseDto.getName())
                 .email(getUserResponseDto.getEmail())
                 .phoneNumber(getUserResponseDto.getPhoneNumber())

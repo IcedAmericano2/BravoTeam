@@ -54,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public List<GetProjectListResponseDto> getProjectList(/*String requestUserId*/) {
+    public List<GetProjectListResponseDto> getProjectList() {
         List<GetProjectListResponseDto> projectList = projectRepository.findAll()
                 .stream().map(GetProjectListResponseDto::from)
                 .collect(Collectors.toList());
@@ -72,8 +72,8 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public GetProjectResponseDto getProject(Long projectIndex) {
-        Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
+    public GetProjectResponseDto getProject(Long projectId) {
+        Project project = projectRepository.findByIdWithProjectUserList(projectId)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
         if(!project.isLeaderOrMember(JwtContextHolder.getUserId()))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
@@ -84,8 +84,8 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void deleteProject(Long projectIndex) {
-        Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
+    public void deleteProject(Long projectId) {
+        Project project = projectRepository.findByIdWithProjectUserList(projectId)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
         checkLeaderAuthorization(project);
         projectRepository.delete(project);
@@ -94,8 +94,8 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void updateProject(Long projectIndex, ProjectRegisterRequestDto projectUpdateRequestDto) {
-        Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
+    public void updateProject(Long projectId, ProjectRegisterRequestDto projectUpdateRequestDto) {
+        Project project = projectRepository.findByIdWithProjectUserList(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
         checkLeaderAuthorization(project);
         validateProjectPeriod(projectUpdateRequestDto);
@@ -111,8 +111,8 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void finishProject(Long projectIndex) {
-        Project project = projectRepository.findById(projectIndex)
+    public void finishProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
         checkLeaderAuthorization(project);
         project.finish();

@@ -33,9 +33,9 @@ public class Project {
     }
 
     @Id
-    @Column(name = "project_index")
+    @Column(name = "project_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long projectIndex;
+    private Long projectId;
 
     @Column(name = "project_name")
     private String name;

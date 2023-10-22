@@ -16,18 +16,12 @@ import java.util.List;
 
 @Tag(name = "프로젝트 CRUD API", description = "프로젝트 CRUD API")
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/api/projects")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class ProjectController {
     private final ProjectService projectService;
     private final ResponseService responseService;
-
-    @Operation(summary = "핑 테스트")
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
-    }
 
     //프로젝트 등록
     @Operation(summary = "프로젝트 생성")
@@ -53,32 +47,32 @@ public class ProjectController {
 
     // 프로젝트 상세 조회
     @Operation(summary = "프로젝트 상세 조회")
-    @GetMapping("/{projectIndex}")
-    public CommonResult getProject(@PathVariable Long projectIndex) {
-        GetProjectResponseDto project = projectService.getProject(projectIndex);
+    @GetMapping("/{projectId}")
+    public CommonResult getProject(@PathVariable Long projectId) {
+        GetProjectResponseDto project = projectService.getProject(projectId);
         return responseService.getSingleResult(project);
     }
 
     //프로젝트 수정
     @Operation(summary = "프로젝트 수정")
-    @PutMapping("/{projectIndex}")
-    public CommonResult updateProject(@PathVariable Long projectIndex,
+    @PutMapping("/{projectId}")
+    public CommonResult updateProject(@PathVariable Long projectId,
                                       @Valid @RequestBody ProjectRegisterRequestDto projectUpdateRequestDto){
-        projectService.updateProject(projectIndex, projectUpdateRequestDto);
+        projectService.updateProject(projectId, projectUpdateRequestDto);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 삭제
     @Operation(summary = "프로젝트 삭제")
-    @DeleteMapping("/{projectIndex}")
-    public CommonResult deleteProject(@PathVariable Long projectIndex){
-        projectService.deleteProject(projectIndex);
+    @DeleteMapping("/{projectId}")
+    public CommonResult deleteProject(@PathVariable Long projectId){
+        projectService.deleteProject(projectId);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 완료 표시
     @Operation(summary = "프로젝트 완료 표시")
-    @PutMapping("/{projectIndex}/finish")
-    public CommonResult finishCheckList(@PathVariable Long projectIndex){
-        projectService.finishProject(projectIndex);
+    @PutMapping("/{projectId}/finish")
+    public CommonResult finishCheckList(@PathVariable Long projectId){
+        projectService.finishProject(projectId);
         return responseService.getSuccessfulResult();
     }
 }
