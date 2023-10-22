@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: prod
   application:
-    name: api
+    name: Management-Service
 
   datasource:
     url: ENC(vK3ggYCmRnJlODS6cbBXJAi+7Mw7qpO3mKVnWz9PV+Mi+aQrVJBY++5ecNXwrnQxgbCgoivoVVDJjDe554GHnyoj8f2rUbkyNbgN/QmNAZa+Cc+Gp1x7huLrQD7BCeLC)
