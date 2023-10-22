@@ -3,6 +3,9 @@ package com.mju.management.domain.project.infrastructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProjectUserRepository extends JpaRepository<ProjectUser, Long> {
+    Optional<ProjectUser> findByProjectAndUserId(Project project, Long userId);
 }
