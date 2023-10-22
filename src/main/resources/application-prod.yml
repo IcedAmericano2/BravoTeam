@@ -23,8 +23,6 @@ spring:
 eureka:
   instance:
     hostname : 3.35.179.234
-    lease-renewal-interval-in-seconds: 1
-    lease-expiration-duration-in-seconds: 2
     instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
   client:
     register-with-eureka: true
