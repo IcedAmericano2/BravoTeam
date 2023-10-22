@@ -41,13 +41,9 @@ public class JwtInterceptor implements HandlerInterceptor {
                 .parseClaimsJws(token)
                 .getBody();
 
-        Long userId = claims.get("userId", Long.class);
-        String username = claims.get("username", String.class);
-        String email = claims.getSubject();
-
-        JwtContextHolder.setUserId(userId);
-        JwtContextHolder.setUsername(username);
-        JwtContextHolder.setEmail(email);
+        JwtContextHolder.setUserId(claims.get("userId", Long.class));
+        JwtContextHolder.setUsername(claims.get("username", String.class));
+        JwtContextHolder.setEmail(claims.getSubject());
         return true;
     }
 
