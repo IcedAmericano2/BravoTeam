@@ -44,6 +44,13 @@ public class ProjectController {
         return responseService.getListResult(projectList);
     }
 
+    @Operation(summary = "내가 속한 프로젝트 목록 조회")
+    @GetMapping("/me")
+    public CommonResult getMyProjectList() {
+        List<GetProjectListResponseDto> myProjectList = projectService.getMyProjectList();
+        return responseService.getListResult(myProjectList);
+    }
+
     // 프로젝트 상세 조회
     @Operation(summary = "프로젝트 상세 조회")
     @GetMapping("/{projectIndex}")

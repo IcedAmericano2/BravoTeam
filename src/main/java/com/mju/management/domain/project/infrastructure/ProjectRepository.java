@@ -1,5 +1,6 @@
 package com.mju.management.domain.project.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("select p from Project p left join fetch p.projectUserList where p.projectIndex = :projectId")
 	Optional<Project> findByIdWithProjectUserList(@Param("projectId") Long projectId);
+
+	@Query("SELECT p FROM Project p WHERE EXISTS (SELECT pu FROM p.projectUserList pu WHERE pu.userId = :userId)")
+	List<Project> findAllByUserId(@Param("userId") Long userId);
 
 }

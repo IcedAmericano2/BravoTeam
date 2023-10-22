@@ -63,6 +63,15 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    public List<GetProjectListResponseDto> getMyProjectList() {
+        List<GetProjectListResponseDto> myProjectList = projectRepository.findAllByUserId(JwtContextHolder.getUserId())
+                .stream().map(GetProjectListResponseDto::from)
+                .collect(Collectors.toList());
+        if (myProjectList.isEmpty()) throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
+        return myProjectList;
+    }
+
+    @Override
     public GetProjectResponseDto getProject(Long projectIndex) {
         Project project = projectRepository.findByIdWithProjectUserList(projectIndex)
                 .orElseThrow(()->new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));

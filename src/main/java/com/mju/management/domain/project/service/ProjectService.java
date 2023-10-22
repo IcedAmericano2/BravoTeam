@@ -10,6 +10,7 @@ public interface ProjectService {
 
     void registerProject(ProjectRegisterRequestDto projectRegisterRequestDto);
     List<GetProjectListResponseDto> getProjectList();
+    List<GetProjectListResponseDto> getMyProjectList();
     GetProjectResponseDto getProject(Long projectIndex);
     void deleteProject(Long projectIndex);
     void updateProject(Long projectIndex, ProjectRegisterRequestDto projectRegisterRequestDto);
