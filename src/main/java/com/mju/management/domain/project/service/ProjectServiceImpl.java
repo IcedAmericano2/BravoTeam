@@ -94,7 +94,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     // 요청 dto에 있지만 db에는 없는 팀원을 추가
     private void addProjectUser(Project project, Set<Long> requestMemberIdList) {
-        List<Long> existingMemberIdList = project.getMemberIdList();
+        Set<Long> existingMemberIdList = project.getMemberIdList();
         for(Long requestMemberId : requestMemberIdList)
             if(!existingMemberIdList.contains(requestMemberId))
                 project.getProjectUserList().add(

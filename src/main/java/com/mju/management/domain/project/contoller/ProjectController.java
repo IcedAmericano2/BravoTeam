@@ -32,7 +32,7 @@ public class ProjectController {
     //프로젝트 등록
     @Operation(summary = "프로젝트 생성")
     @PostMapping()
-    public CommonResult registerProject(/*@RequestHeader("Authorization") String token,*/ @Valid @RequestBody ProjectRegisterRequestDto projectRegisterRequestDto) {
+    public CommonResult registerProject(@Valid @RequestBody ProjectRegisterRequestDto projectRegisterRequestDto) {
         projectService.registerProject(projectRegisterRequestDto);
         return responseService.getSuccessfulResult();
     }

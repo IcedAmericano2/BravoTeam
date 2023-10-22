@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -79,8 +81,8 @@ public class Project {
         this.isChecked = true;
     }
 
-    public List<Long> getMemberIdList(){
-        List<Long> memberIdList = new ArrayList<>();
+    public Set<Long> getMemberIdList(){
+        Set<Long> memberIdList = new HashSet<>();
         for (ProjectUser projectUser : projectUserList)
             if(projectUser.getRole() == Role.MEMBER)
                 memberIdList.add(projectUser.getUserId());
