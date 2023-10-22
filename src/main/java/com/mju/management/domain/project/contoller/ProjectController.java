@@ -39,14 +39,14 @@ public class ProjectController {
     //프로젝트 전체 조회
     @Operation(summary = "프로젝트 전체목록 조회")
     @GetMapping()
-    public CommonResult getProjectList(/*@RequestHeader("Authorization") String token*/) {
+    public CommonResult getProjectList() {
         List<GetProjectResponseDto> projectList = projectService.getProjectList();
         return responseService.getListResult(projectList);
     }
     //프로젝트 수정
     @Operation(summary = "프로젝트 수정")
     @PutMapping("/{projectIndex}")
-    public CommonResult updateProject(/*@RequestHeader("Authorization") String token,*/ @PathVariable Long projectIndex,
+    public CommonResult updateProject(@PathVariable Long projectIndex,
                                       @Valid @RequestBody ProjectRegisterRequestDto projectUpdateRequestDto){
         projectService.updateProject(projectIndex, projectUpdateRequestDto);
         return responseService.getSuccessfulResult();
@@ -54,14 +54,14 @@ public class ProjectController {
     //프로젝트 삭제
     @Operation(summary = "프로젝트 삭제")
     @DeleteMapping("/{projectIndex}")
-    public CommonResult deleteProject(/*@RequestHeader("Authorization") String token,*/ @PathVariable Long projectIndex){
+    public CommonResult deleteProject(@PathVariable Long projectIndex){
         projectService.deleteProject(projectIndex);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 완료 표시
     @Operation(summary = "프로젝트 완료 표시")
     @GetMapping("/{projectIndex}")
-    public CommonResult finishCheckList(/*@RequestHeader("Authorization") String token,*/ @PathVariable Long projectIndex){
+    public CommonResult finishCheckList(@PathVariable Long projectIndex){
         projectService.finishProject(projectIndex);
         return responseService.getSuccessfulResult();
     }

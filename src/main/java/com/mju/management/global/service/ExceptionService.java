@@ -103,8 +103,15 @@ public class ExceptionService {
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected CommonResult illegalArgumentException(IllegalArgumentException e) {
-        log.error("illegal Argument exception", e);
+        log.error("illegal argument exception", e);
         ExceptionList exceptionList = ExceptionList.ILLEGAL_ARGUMENT_JWT;
+        return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    protected CommonResult unauthorizedAccessException(UnauthorizedAccessException e) {
+        log.error("unauthorized access exception", e);
+        ExceptionList exceptionList = e.getExceptionList();
         return responseService.getFailResult(exceptionList.getCode(), exceptionList.getMessage());
     }
 

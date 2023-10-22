@@ -49,9 +49,12 @@ public enum ExceptionList {
     PREMATURE_JWT(7002, "아직 활성화되지 않은 토큰입니다."),
     UNSUPPORTED_JWT(7003, "지원되지 않는 토큰 형식 또는 구조입니다."),
     MALFORMED_JWT(7004, "토큰의 형식이 잘못되었습니다."),
-    SIGNATURE_JWT(7004, "토큰의 서명이 검증되지 않았습니다."),
-    ILLEGAL_ARGUMENT_JWT(7005, "잘못된 인자가 전달되었습니다."),
-    SECURITY_JWT(7005, "보안 관련 문제로 토큰 검증이 실패했습니다.");
+    SIGNATURE_JWT(7005, "토큰의 서명이 검증되지 않았습니다."),
+    ILLEGAL_ARGUMENT_JWT(7006, "잘못된 인자가 전달되었습니다."),
+    SECURITY_JWT(7007, "보안 관련 문제로 토큰 검증이 실패했습니다."),
+
+    // 권한
+    UNAUTHORIZED_ACCESS(8000, "접근 권한이 없습니다.");
 
     private final int code;
     private final String message;
