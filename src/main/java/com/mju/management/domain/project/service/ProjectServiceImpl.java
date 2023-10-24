@@ -37,6 +37,8 @@ public class ProjectServiceImpl implements ProjectService{
         Set<Long> memberIdList = createProjectRequestDto.getMemberIdList();
         memberIdList.remove(JwtContextHolder.getUserId());
 
+        filterNonExistentMemberId(memberIdList);
+
         project.getProjectUserList().add(
                 ProjectUser.builder()
                         .project(project)
@@ -105,10 +107,13 @@ public class ProjectServiceImpl implements ProjectService{
 
         Set<Long> requestMemberIdList = projectUpdateRequestDto.getMemberIdList();
         requestMemberIdList.remove(JwtContextHolder.getUserId());
-        // 요청 dto에 있지만 db에는 없는 팀원을 추가
-        addProjectUser(project, requestMemberIdList);
         // 요청 dto에 없지만 db에는 있는 팀원을 삭제
         deleteProjectUser(project, requestMemberIdList);
+
+        filterNonExistentMemberId(requestMemberIdList);
+        // 요청 dto에 있지만 db에는 없는 팀원을 추가
+        addProjectUser(project, requestMemberIdList);
+
     }
 
     @Override
@@ -130,6 +135,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     // 요청 dto에 있지만 db에는 없는 팀원을 추가
     private void addProjectUser(Project project, Set<Long> requestMemberIdList) {
+
         Set<Long> existingMemberIdList = project.getMemberIdList();
         for(Long requestMemberId : requestMemberIdList)
             if(!existingMemberIdList.contains(requestMemberId))
@@ -140,6 +146,7 @@ public class ProjectServiceImpl implements ProjectService{
                                 .role(Role.MEMBER)
                                 .build()
                 );
+
     }
 
     // 요청 dto에 없지만 db에는 있는 팀원을 삭제
@@ -164,5 +171,9 @@ public class ProjectServiceImpl implements ProjectService{
             getProjectUserResponseDtoList.add(getProjectUserResponseDto);
         }
         return getProjectUserResponseDtoList;
+    }
+
+    private void filterNonExistentMemberId(Set<Long> memberIdList) {
+        memberIdList.removeIf(memberId -> userService.getUser(memberId) == null);
     }
 }
