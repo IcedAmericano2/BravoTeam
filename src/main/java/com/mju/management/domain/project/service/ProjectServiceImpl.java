@@ -9,13 +9,11 @@ import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
-import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
+import com.mju.management.domain.project.dto.reqeust.CreateProjectRequestDto;
 import com.mju.management.global.model.Exception.StartDateAfterEndDateException;
 import com.mju.management.global.model.Exception.UnauthorizedAccessException;
-import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,11 +30,11 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void registerProject(ProjectRegisterRequestDto projectRegisterRequestDto) {
-        validateProjectPeriod(projectRegisterRequestDto);
-        Project project = projectRepository.save(projectRegisterRequestDto.toEntity());
+    public void createProject(CreateProjectRequestDto createProjectRequestDto) {
+        validateProjectPeriod(createProjectRequestDto);
+        Project project = projectRepository.save(createProjectRequestDto.toEntity());
 
-        Set<Long> memberIdList = projectRegisterRequestDto.getMemberIdList();
+        Set<Long> memberIdList = createProjectRequestDto.getMemberIdList();
         memberIdList.remove(JwtContextHolder.getUserId());
 
         project.getProjectUserList().add(
@@ -98,7 +96,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     @Transactional
-    public void updateProject(Long projectId, ProjectRegisterRequestDto projectUpdateRequestDto) {
+    public void updateProject(Long projectId, CreateProjectRequestDto projectUpdateRequestDto) {
         Project project = projectRepository.findByIdWithProjectUserList(projectId)
                 .orElseThrow(() -> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
         checkLeaderAuthorization(project);
@@ -123,9 +121,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     }
 
-    public void validateProjectPeriod(ProjectRegisterRequestDto projectRegisterRequestDto){
-        LocalDate startDate = projectRegisterRequestDto.startDateAsLocalDateType();
-        LocalDate endDate = projectRegisterRequestDto.finishDateAsLocalDateType();
+    public void validateProjectPeriod(CreateProjectRequestDto createProjectRequestDto){
+        LocalDate startDate = createProjectRequestDto.startDateAsLocalDateType();
+        LocalDate endDate = createProjectRequestDto.finishDateAsLocalDateType();
         if(startDate.isAfter(endDate))
             throw new StartDateAfterEndDateException(ExceptionList.START_DATE_AFTER_END_DATE_EXCEPTION);
     }
