@@ -4,6 +4,7 @@ import static com.mju.management.global.model.Exception.ExceptionList.*;
 
 import java.util.Optional;
 
+import com.mju.management.domain.post.controller.response.PostDetailResponse;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.PostRepository;
 import com.mju.management.domain.post.model.dto.request.CreatePostRequestServiceDto;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PostService {
+public class PostServiceImpl {
 
     private final PostRepository postRepository;
     private final ProjectRepository projectRepository;
@@ -33,7 +34,7 @@ public class PostService {
     // private final UserRepository userRepository;
 
 	public CommonResult createPost(/* User writer, */ CreatePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -52,7 +53,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public CommonResult retrieveDetailPost(/* User user, */ RetrieveDetailPostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -69,11 +70,11 @@ public class PostService {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(post);
+        return responseService.getSingleResult(PostDetailResponse.from(post));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -100,7 +101,7 @@ public class PostService {
     }
 
     public CommonResult deletePost(DeletePostRequestServiceDto dto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(dto.projectId());
+        Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
         }
@@ -125,4 +126,5 @@ public class PostService {
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
     }
+
 }

@@ -2,7 +2,6 @@ package com.mju.management.domain.todo.service;
 
 import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.infrastructure.ProjectRepository;
-import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import com.mju.management.domain.todo.dto.ToDoRequestDto;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.domain.todo.infrastructure.ToDoJpaRepository;
@@ -10,7 +9,6 @@ import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,39 +18,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ToDoServiceServiceImpl implements ToDoService {
     private final ToDoJpaRepository toDoJpaRepository;
-    private final ProjectRepository projectRepository;
 
+    private final ProjectRepository projectRepository;
     @Override
-    public void registerToDo(/*String userId, */Long projectId, ToDoRequestDto toDoRequestDto) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(projectId);
-        if(optionalProject.isPresent()){
+    @Transactional
+    public void registerToDo(Long projectId, ToDoRequestDto toDoRequestDto) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
+
             ToDoEntity toDoEntity = ToDoEntity.builder()
-//                    .user_id(userId)
                     .todoContent(toDoRequestDto.getTodoContent())
+                    .todoEmergency(toDoRequestDto.isTodoEmergency())
+                    .project(project)
                     .build();
-            project.registerToDo(toDoEntity);
             toDoJpaRepository.save(toDoEntity);
         } else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
         }
+
     }
 
     @Override
     @Transactional
     public List<ToDoEntity> getToDo(Long projectId) {
-        Optional<Project> optionalProject = projectRepository.findByProjectIndex(projectId);
-        if(optionalProject.isPresent()) {
-            Sort sort = Sort.by(Sort.Order.asc("isChecked"));
-            List<ToDoEntity> toDoEntity = toDoJpaRepository.findAll(sort);
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isPresent()) {
+            Project project = optionalProject.get();
+            List<ToDoEntity> toDoEntity = toDoJpaRepository.findByProjectAndOrderByConditions(project);
+
             if (!toDoEntity.isEmpty()) {
                 return toDoEntity;
-            } else {
+            }else {
                 throw new NonExistentException(ExceptionList.NON_EXISTENT_CHECKLIST);
             }
-        } else {
+        }else {
             throw new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT);
         }
+
     }
 
     @Override

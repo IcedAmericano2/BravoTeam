@@ -25,8 +25,9 @@ public class ToDoEntity {
     @Column(name = "todo_index")
     private Long todoIndex;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
     private Project project;
 
     @Column(name = "user_id")

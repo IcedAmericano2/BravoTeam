@@ -1,75 +1,78 @@
 package com.mju.management.domain.project.contoller;
 
+import com.mju.management.domain.project.dto.response.GetProjectListResponseDto;
+import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
 import com.mju.management.domain.project.service.ProjectService;
-import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
-import com.mju.management.domain.project.dto.ProjectRegisterDto;
+import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@RestController
-@RequestMapping("/api/project")
 @Tag(name = "프로젝트 CRUD API", description = "프로젝트 CRUD API")
+@RestController
+@RequestMapping("/api/projects")
+@RequiredArgsConstructor
+@CrossOrigin("*")
 public class ProjectController {
-    @Autowired
-    ProjectService projectService;
-    @Autowired
-    ResponseService responseService;
-//    @Autowired
-//    UserServiceImpl userService;
-
-    @GetMapping("/ping")
-    @Operation(summary = "Ping 테스트", description = "서버 피드백 확인용")
-    public String ping() {
-        return "pong";
-    }
+    private final ProjectService projectService;
+    private final ResponseService responseService;
 
     //프로젝트 등록
+    @Operation(summary = "프로젝트 생성")
     @PostMapping()
-    @Operation(summary = "프로젝트 등록", description = "신규 프로젝트를 등록하는 API")
-    public CommonResult registerProject(@RequestBody ProjectRegisterDto projectRegisterDto/*, HttpServletRequest request*/) {
-//        String userId = userService.getUserId(request);
-//        userService.checkUserType(userId, "");
-        projectService.registerProject(/*userId, */projectRegisterDto);
+    public CommonResult registerProject(@Valid @RequestBody ProjectRegisterRequestDto projectRegisterRequestDto) {
+        projectService.registerProject(projectRegisterRequestDto);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 전체 조회
+    @Operation(summary = "프로젝트 전체목록 조회")
     @GetMapping()
-    @Operation(summary = "프로젝트 목록 가져오기", description = "프로젝트 목록을 가져오는 API")
-    public CommonResult getProject() {
-        List<Project> project = projectService.getProject();
-        return responseService.getListResult(project);
+    public CommonResult getProjectList() {
+        List<GetProjectListResponseDto> projectList = projectService.getProjectList();
+        return responseService.getListResult(projectList);
     }
+
+    @Operation(summary = "내가 속한 프로젝트 목록 조회")
+    @GetMapping("/me")
+    public CommonResult getMyProjectList() {
+        List<GetProjectListResponseDto> myProjectList = projectService.getMyProjectList();
+        return responseService.getListResult(myProjectList);
+    }
+
+    // 프로젝트 상세 조회
+    @Operation(summary = "프로젝트 상세 조회")
+    @GetMapping("/{projectId}")
+    public CommonResult getProject(@PathVariable Long projectId) {
+        GetProjectResponseDto project = projectService.getProject(projectId);
+        return responseService.getSingleResult(project);
+    }
+
     //프로젝트 수정
-    @PutMapping("/{projectIndex}")
-    @Operation(summary = "프로젝트 수정하기", description = "기존 프로젝트를 수정하는 API")
-    public CommonResult updateProject(@PathVariable Long projectIndex, @RequestBody ProjectRegisterDto projectRegisterDto/*, HttpServletRequest request*/){
-//        String userId = userService.getUserId(request);
-//        userService.checkUsetType(userId, "");
-        projectService.updateProject(projectIndex, projectRegisterDto);
+    @Operation(summary = "프로젝트 수정")
+    @PutMapping("/{projectId}")
+    public CommonResult updateProject(@PathVariable Long projectId,
+                                      @Valid @RequestBody ProjectRegisterRequestDto projectUpdateRequestDto){
+        projectService.updateProject(projectId, projectUpdateRequestDto);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 삭제
-    @DeleteMapping("/{projectIndex}")
-    @Operation(summary = "프로젝트 삭제하기", description = "프로젝트를 삭제하는 API")
-    public CommonResult deleteProject(@PathVariable Long projectIndex/*, HttpServletRequest request*/){
-//        String userId = userService.getuserId(request);
-//        userService.checkUserType(userId, "");
-        projectService.deleteProject(projectIndex);
+    @Operation(summary = "프로젝트 삭제")
+    @DeleteMapping("/{projectId}")
+    public CommonResult deleteProject(@PathVariable Long projectId){
+        projectService.deleteProject(projectId);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 완료 표시
-    @GetMapping("/{projectIndex}")
-    @Operation(summary = "완료된 프로젝트 표시하기", description = "완료된 프로젝트를 표시하는 API")
-    public CommonResult finishCheckList(@PathVariable Long projectIndex){
-        projectService.finishProject(projectIndex);
+    @Operation(summary = "프로젝트 완료 표시")
+    @PutMapping("/{projectId}/finish")
+    public CommonResult finishCheckList(@PathVariable Long projectId){
+        projectService.finishProject(projectId);
         return responseService.getSuccessfulResult();
     }
 }
