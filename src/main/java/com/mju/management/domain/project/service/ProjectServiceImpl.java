@@ -4,6 +4,7 @@ import com.mju.management.domain.project.dto.response.GetProjectListResponseDto;
 import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
 import com.mju.management.domain.project.dto.response.GetProjectUserResponseDto;
 import com.mju.management.domain.project.infrastructure.*;
+import com.mju.management.domain.user.dto.GetUserResponseDto;
 import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Exception.ExceptionList;
@@ -11,11 +12,14 @@ import com.mju.management.global.model.Exception.NonExistentException;
 import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
 import com.mju.management.global.model.Exception.StartDateAfterEndDateException;
 import com.mju.management.global.model.Exception.UnauthorizedAccessException;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -78,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService{
         if(!project.isLeaderOrMember(JwtContextHolder.getUserId()))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
         List<GetProjectUserResponseDto> getProjectUserResponseDtoList =
-                userService.getProjectUserResponseDtoList(project.getProjectUserList());
+                getProjectUserResponseDtoList(project.getProjectUserList());
         return GetProjectResponseDto.from(project, getProjectUserResponseDtoList);
     }
 
@@ -150,5 +154,17 @@ public class ProjectServiceImpl implements ProjectService{
     private void checkLeaderAuthorization(Project project) {
         if(!project.isLeader(JwtContextHolder.getUserId()))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
+    }
+
+    private List<GetProjectUserResponseDto> getProjectUserResponseDtoList(List<ProjectUser> projectUserList) {
+        List<GetProjectUserResponseDto> getProjectUserResponseDtoList = new ArrayList<>();
+        for(ProjectUser projectUser : projectUserList){
+            GetUserResponseDto getUserResponseDto = userService.getUser(projectUser.getUserId());
+            if(getUserResponseDto==null) continue;
+            GetProjectUserResponseDto getProjectUserResponseDto =
+                    GetProjectUserResponseDto.from(getUserResponseDto, projectUser.getRole());
+            getProjectUserResponseDtoList.add(getProjectUserResponseDto);
+        }
+        return getProjectUserResponseDtoList;
     }
 }
