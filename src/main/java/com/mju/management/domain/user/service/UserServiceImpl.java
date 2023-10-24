@@ -31,7 +31,7 @@ public class UserServiceImpl {
             for(ProjectUser projectUser : projectUserList){
                 GetUserResponseDto getUserResponseDto = null;
                 try{getUserResponseDto = userFeignClient.getUser(projectUser.getUserId()).getBody();}
-                catch (Exception e){continue;}
+                catch (Exception e){e.printStackTrace(); continue;}
                 GetProjectUserResponseDto getProjectUserResponseDto =
                         GetProjectUserResponseDto.from(getUserResponseDto, projectUser.getRole());
                 getProjectUserResponseDtoList.add(getProjectUserResponseDto);
