@@ -13,6 +13,9 @@ import com.mju.management.domain.post.model.dto.request.RetrieveDetailPostReques
 import com.mju.management.domain.post.model.dto.request.UpdatePostRequestServiceDto;
 import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.infrastructure.ProjectRepository;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
+import com.mju.management.global.model.Exception.ExceptionList;
+import com.mju.management.global.model.Exception.UnauthorizedAccessException;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
 
@@ -40,10 +43,8 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것
-        // if(!project.getMembers().contains(writer)){
-        //     return responseService.getFailResult(NOT_TEAM_MEMBER.getCode(), NOT_TEAM_MEMBER.getMessage());
-        // }
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
 
         Post post = dto.toEntity();
         project.createPost(post);
@@ -59,10 +60,8 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것 (사용자가 해당 게시글이 속한 프로젝트의 팀원인지 확인)
-        // if(!project.getMembers().contains(user)){
-        //     return responseService.getFailResult(NOT_TEAM_MEMBER.getCode(), NOT_TEAM_MEMBER.getMessage());
-        // }
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
@@ -125,6 +124,11 @@ public class PostServiceImpl {
 
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
+    }
+
+    private void memberAuthorizationCheck(Project project, Long userId){
+        if(!project.isLeaderOrMember(userId))
+            throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }
 
 }
