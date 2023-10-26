@@ -37,7 +37,7 @@ public class PostReadServiceImpl implements PostReadService {
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
+        checkMemberAuthorization(project, JwtContextHolder.getUserId());
 
         List<Post> postList = postRepository.findByCategoryAndProject(getCategory, project);
         List<PostResponse> postResponseList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class PostReadServiceImpl implements PostReadService {
                 .orElseThrow(()-> new NonExistentException(ExceptionList.NON_EXISTENT_PROJECT));
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
+        checkMemberAuthorization(project, JwtContextHolder.getUserId());
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); // "createdAt" 필드를 기준으로 내림차순 정렬
         Pageable pageable = PageRequest.of(0, 3, sort); // 페이지 번호 0부터 3개의 결과를 가져옴
@@ -85,7 +85,7 @@ public class PostReadServiceImpl implements PostReadService {
         return getCategory;
     }
 
-    private void memberAuthorizationCheck(Project project, Long userId){
+    private void checkMemberAuthorization(Project project, Long userId){
         if(!project.isLeaderOrMember(userId))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }

@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postId).get();
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(post.getProject(), JwtContextHolder.getUserId());
+        checkMemberAuthorization(post.getProject(), JwtContextHolder.getUserId());
 
         Comment comment = Comment.from(post, commentCreate);
         return commentRepository.save(comment);
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(postId).get();
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(post.getProject(), JwtContextHolder.getUserId());
+        checkMemberAuthorization(post.getProject(), JwtContextHolder.getUserId());
 
         List<Comment> comments = new ArrayList<>();
         post.getCommentList().forEach(commentEntity->{
@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(comment);
     }
 
-    private void memberAuthorizationCheck(Project project, Long userId){
+    private void checkMemberAuthorization(Project project, Long userId){
         if(!project.isLeaderOrMember(userId))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }

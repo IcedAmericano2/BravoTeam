@@ -44,7 +44,7 @@ public class PostServiceImpl {
         Project project = optionalProject.get();
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
+        checkMemberAuthorization(project, JwtContextHolder.getUserId());
 
         Post post = dto.toEntity();
         project.createPost(post);
@@ -61,7 +61,7 @@ public class PostServiceImpl {
         Project project = optionalProject.get();
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        memberAuthorizationCheck(project, JwtContextHolder.getUserId());
+        checkMemberAuthorization(project, JwtContextHolder.getUserId());
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
@@ -126,7 +126,7 @@ public class PostServiceImpl {
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
     }
 
-    private void memberAuthorizationCheck(Project project, Long userId){
+    private void checkMemberAuthorization(Project project, Long userId){
         if(!project.isLeaderOrMember(userId))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }
