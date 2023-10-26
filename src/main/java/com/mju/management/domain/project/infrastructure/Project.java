@@ -98,8 +98,7 @@ public class Project {
 
     public boolean isLeaderOrMember(Long userId){
         for(ProjectUser projectUser : projectUserList)
-            if(projectUser.getUserId() == userId)
-                return true;
+            if(projectUser.getUserId() == userId) return true;
         return  false;
     }
 }

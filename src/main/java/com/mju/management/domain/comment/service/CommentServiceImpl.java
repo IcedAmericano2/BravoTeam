@@ -7,8 +7,11 @@ import com.mju.management.domain.comment.domain.CommentUpdate;
 import com.mju.management.domain.comment.service.port.CommentRepository;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.PostRepository;
+import com.mju.management.domain.project.infrastructure.Project;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.NonExistentException;
+import com.mju.management.global.model.Exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +35,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment create(Long postId, CommentCreate commentCreate) {
         Post post = postRepository.findById(postId).get();
+
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        memberAuthorizationCheck(post.getProject(), JwtContextHolder.getUserId());
+
         Comment comment = Comment.from(post, commentCreate);
         return commentRepository.save(comment);
     }
@@ -39,6 +46,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> read(Long postId) {
         Post post = postRepository.findById(postId).get();
+
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        memberAuthorizationCheck(post.getProject(), JwtContextHolder.getUserId());
+
         List<Comment> comments = new ArrayList<>();
         post.getCommentList().forEach(commentEntity->{
             comments.add(commentEntity.toModel());
@@ -57,6 +68,11 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long commentId) {
         Comment comment = getById(commentId);
         commentRepository.delete(comment);
+    }
+
+    private void memberAuthorizationCheck(Project project, Long userId){
+        if(!project.isLeaderOrMember(userId))
+            throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }
 
 }
