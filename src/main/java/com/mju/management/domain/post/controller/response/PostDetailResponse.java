@@ -40,14 +40,14 @@ public class PostDetailResponse {
     @Schema(description = "카테고리")
     Category category;
 
-    public static PostDetailResponse from(Post post){
+    public static PostDetailResponse from(Post post, String userName){
 
         return PostDetailResponse.builder()
                 .id(post.getId())
 //                .status()
                 .title(post.getTitle())
                 .content(post.getContent())
-//                .userName()
+                .userName(userName)
                 .startDate(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss")))
                 .commentSum(post.getCommentList().size())
                 .category(post.getCategory())

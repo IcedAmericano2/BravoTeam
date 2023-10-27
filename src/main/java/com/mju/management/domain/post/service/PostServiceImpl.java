@@ -13,6 +13,8 @@ import com.mju.management.domain.post.model.dto.request.RetrieveDetailPostReques
 import com.mju.management.domain.post.model.dto.request.UpdatePostRequestServiceDto;
 import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.project.infrastructure.ProjectRepository;
+import com.mju.management.domain.user.dto.GetUserResponseDto;
+import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.UnauthorizedAccessException;
@@ -30,6 +32,7 @@ public class PostServiceImpl {
 
     private final PostRepository postRepository;
     private final ProjectRepository projectRepository;
+    private final UserServiceImpl userService;
 
     private final ResponseService responseService;
 
@@ -58,8 +61,10 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
+        Long userId = JwtContextHolder.getUserId();
+
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        checkMemberAuthorization(project, JwtContextHolder.getUserId());
+        checkMemberAuthorization(project, userId);
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
@@ -67,7 +72,7 @@ public class PostServiceImpl {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(PostDetailResponse.from(post));
+        return responseService.getSingleResult(PostDetailResponse.from(post, getUsername(userId)));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
@@ -123,6 +128,12 @@ public class PostServiceImpl {
     private void checkMemberAuthorization(Project project, Long userId){
         if(!project.isLeaderOrMember(userId))
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
+    }
+
+    private String getUsername(Long userId){
+        GetUserResponseDto getUserResponseDto = userService.getUser(userId);
+        if(getUserResponseDto == null) return "(알 수 없음)";
+        return getUserResponseDto.getName();
     }
 
 }
