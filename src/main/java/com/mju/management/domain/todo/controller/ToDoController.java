@@ -23,8 +23,6 @@ public class ToDoController {
     ToDoService toDoService;
     @Autowired
     ResponseService responseService;
-//    @Autowired
-//    UserServiceImpl userService;
 
     @GetMapping("/todo/ping")
     @Operation(summary = "Ping 테스트", description = "서버 피드백 확인용")
@@ -35,10 +33,8 @@ public class ToDoController {
     // 체크박스 등록
     @PostMapping("/projects/{projectId}/todo")
     @Operation(summary = "할일 등록", description = "할일 등록 api")
-    public CommonResult registerToDo(@PathVariable Long projectId, @RequestBody ToDoRequestDto toDoRequestDto/*, HttpServletRequest request */){
-//        String userId = userService.getUserId(request);
-//        userService.chechUserType(userId, "");
-        toDoService.registerToDo(/*userId, */projectId, toDoRequestDto);
+    public CommonResult registerToDo(@PathVariable Long projectId, @RequestBody ToDoRequestDto toDoRequestDto){
+        toDoService.registerToDo(projectId, toDoRequestDto);
         return responseService.getSuccessfulResult();
     }
 
@@ -53,7 +49,7 @@ public class ToDoController {
     //체크박스 하나만 선택
     @GetMapping("/todo/{todoIndex}")
     @Operation(summary = "할일 선택 조회", description = "할일 선택 조회 api")
-    public CommonResult showToDoOne(@PathVariable Long todoIndex/*, HttpServletRequest request*/) {
+    public CommonResult showToDoOne(@PathVariable Long todoIndex) {
         ToDoEntity toDoEntity = toDoService.showToDoOne(todoIndex);
         CommonResult commonResult = responseService.getSingleResult(toDoEntity);
         return commonResult;
@@ -61,18 +57,14 @@ public class ToDoController {
     //체크박스 수정
     @PutMapping("/todo/{todoIndex}")
     @Operation(summary = "할일 업데이트", description = "할일 업데이트 api")
-    public CommonResult updateToDo(@PathVariable Long todoIndex, @RequestBody ToDoRequestDto toDoRequestDto/*, HttpServletRequest request*/) {
-//        String userId = userService.userId(request);
-//        userServcie.checkUserType(userId, "")
+    public CommonResult updateToDo(@PathVariable Long todoIndex, @RequestBody ToDoRequestDto toDoRequestDto) {
         toDoService.updateToDo(todoIndex, toDoRequestDto);
         return responseService.getSuccessfulResult();
     }
     //체크박스 삭제
     @DeleteMapping("/todo/{todoIndex}")
     @Operation(summary = "할일 삭제", description = "할일 삭제 api")
-    public CommonResult deleteToDo(@PathVariable Long todoIndex/*, HttpServletRequest reequest*/) {
-//        String userId = userService.userId(request);
-//        userService.checkUserType(userId, "");
+    public CommonResult deleteToDo(@PathVariable Long todoIndex) {
         toDoService.deleteToDo(todoIndex);
         return responseService.getSuccessfulResult();
     }
