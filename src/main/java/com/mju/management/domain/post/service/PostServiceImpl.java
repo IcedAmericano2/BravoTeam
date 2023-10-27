@@ -61,10 +61,8 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
-        Long userId = JwtContextHolder.getUserId();
-
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        checkMemberAuthorization(project, userId);
+        checkMemberAuthorization(project, JwtContextHolder.getUserId());
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
@@ -72,7 +70,7 @@ public class PostServiceImpl {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(PostDetailResponse.from(post, getUsername(userId)));
+        return responseService.getSingleResult(PostDetailResponse.from(post, getUsername(post.getWriterId())));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
