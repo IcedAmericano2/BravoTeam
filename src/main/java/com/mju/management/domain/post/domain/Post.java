@@ -44,11 +44,7 @@ public class Post {
 
 	private int reply_cnt = 0;
 
-	// TODO : 게시글 상세 조회 API에 작성자 이름 표시, 게시글 수정 및 삭제 권한 확인
-	// @ManyToOne
-	// @JoinColumn("user_id")
-	// private User writer;
-
+	private Long writerId;
 
 	// TODO: 프로젝트의 팀원일때만, 게시글을 작성할 수 있도록 확인
 	@ManyToOne
@@ -59,12 +55,13 @@ public class Post {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
 	private List<CommentEntity> commentList = new ArrayList<>();
 
-	// TODO : User 기능 추가되면 User writer 필드 추가
+
 	@Builder
-	public Post(String title, String content, Category category) {
+	public Post(String title, String content, Category category, Long writerId) {
 		this.title = title;
 		this.content = content;
 		this.category = category;
+		this.writerId = writerId;
 	}
 
 	public void setProject(Project project) {

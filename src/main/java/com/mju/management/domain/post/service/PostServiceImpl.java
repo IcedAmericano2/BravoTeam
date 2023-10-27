@@ -33,10 +33,7 @@ public class PostServiceImpl {
 
     private final ResponseService responseService;
 
-    // TODO
-    // private final UserRepository userRepository;
-
-	public CommonResult createPost(/* User writer, */ CreatePostRequestServiceDto dto) {
+	public CommonResult createPost(CreatePostRequestServiceDto dto) {
         Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
@@ -44,16 +41,17 @@ public class PostServiceImpl {
         Project project = optionalProject.get();
 
         // 요청자가 해당 프로젝트의 팀원인지 확인
-        checkMemberAuthorization(project, JwtContextHolder.getUserId());
+        Long userId = JwtContextHolder.getUserId();
+        checkMemberAuthorization(project, userId);
 
-        Post post = dto.toEntity();
+        Post post = dto.toEntity(userId);
         project.createPost(post);
         postRepository.save(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 작성에 성공하였습니다.");
     }
 
     @Transactional(readOnly = true)
-    public CommonResult retrieveDetailPost(/* User user, */ RetrieveDetailPostRequestServiceDto dto) {
+    public CommonResult retrieveDetailPost(RetrieveDetailPostRequestServiceDto dto) {
         Optional<Project> optionalProject = projectRepository.findById(dto.projectId());
         if (optionalProject.isEmpty()){
             return responseService.getFailResult(INVALID_PROJECT_ID.getCode(), INVALID_PROJECT_ID.getMessage());
@@ -79,21 +77,19 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것 (사용자가 해당 게시글이 속한 프로젝트의 팀원인지 확인)
-        // if(!project.getMembers().contains(user)){
-        //     return responseService.getFailResult(NOT_TEAM_MEMBER.getCode(), NOT_TEAM_MEMBER.getMessage());
-        // }
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        Long userId = JwtContextHolder.getUserId();
+        checkMemberAuthorization(project, userId);
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
             return responseService.getFailResult(INVALID_POST_ID.getCode(), INVALID_POST_ID.getMessage());
         }
-        Post post = optionalPost.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것 (사용자가 해당 게시글의 작성자인지 확인)
-        // if(post.getWriter().getId() != user.getId()){
-        //     return responseService.getFailResult(NO_PERMISSION_TO_EDIT_POST.getCode(), NO_PERMISSION_TO_EDIT_POST.getMessage());
-        // }
+        Post post = optionalPost.get();
+        if(post.getWriterId() != userId){
+             return responseService.getFailResult(NO_PERMISSION_TO_EDIT_POST.getCode(), NO_PERMISSION_TO_EDIT_POST.getMessage());
+        }
 
         post.update(dto);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 수정에 성공하였습니다.");
@@ -106,21 +102,19 @@ public class PostServiceImpl {
         }
         Project project = optionalProject.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것 (사용자가 해당 게시글이 속한 프로젝트의 팀원인지 확인)
-        // if(!project.getMembers().contains(user)){
-        //     return responseService.getFailResult(NOT_TEAM_MEMBER.getCode(), NOT_TEAM_MEMBER.getMessage());
-        // }
+        // 요청자가 해당 프로젝트의 팀원인지 확인
+        Long userId = JwtContextHolder.getUserId();
+        checkMemberAuthorization(project, userId);
 
         Optional<Post> optionalPost = postRepository.findById(dto.postId());
         if(optionalPost.isEmpty()){
             return responseService.getFailResult(INVALID_POST_ID.getCode(), INVALID_POST_ID.getMessage());
         }
-        Post post = optionalPost.get();
 
-        // TODO : User 기능이 추가되면 주석 풀 것 (사용자가 해당 게시글의 작성자인지 확인)
-        // if(post.getWriter().getId() != user.getId()){
-        //     return responseService.getFailResult(NO_PERMISSION_TO_EDIT_POST.getCode(), NO_PERMISSION_TO_EDIT_POST.getMessage());
-        // }
+        Post post = optionalPost.get();
+        if(post.getWriterId() != userId){
+            return responseService.getFailResult(NO_PERMISSION_TO_EDIT_POST.getCode(), NO_PERMISSION_TO_EDIT_POST.getMessage());
+        }
 
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");

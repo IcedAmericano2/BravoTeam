@@ -9,11 +9,12 @@ public record CreatePostRequestServiceDto(
 	String content,
 	Category category
 ) {
-	public Post toEntity() {
+	public Post toEntity(Long writerId) {
 		return Post.builder()
 			.title(title)
 			.content(content)
 			.category(category)
+			.writerId(writerId)
 			.build();
 	}
 }
