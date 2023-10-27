@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "todo")
 public class ToDoEntity {
     @Builder
-    public ToDoEntity(String todoContent, boolean todoEmergency,Project project){
+    public ToDoEntity(/*String userId, */String todoContent, boolean todoEmergency,Project project){
+//        this.userId = user_id;
         this.todoContent = todoContent;
         this.todoEmergency = todoEmergency;
         this.project = project;
@@ -29,14 +30,22 @@ public class ToDoEntity {
     @JsonIgnore
     private Project project;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @Column(name = "todo_content")
     private String todoContent;
 
     @Column(name = "is_checked")
     private boolean isChecked;
 
+    public void setProject(Project project){
+        this.project = project;
+    }
+
     @Column(name = "todo_emergency")
     private boolean todoEmergency;
+
 
     public void update(String todoContent) {
         this.todoContent = todoContent;
