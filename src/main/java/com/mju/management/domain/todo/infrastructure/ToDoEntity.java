@@ -30,9 +30,6 @@ public class ToDoEntity {
     @JsonIgnore
     private Project project;
 
-    @Column(name = "user_id")
-    private String userId;
-
     @Column(name = "todo_content")
     private String todoContent;
 

@@ -1,15 +1,12 @@
 package com.mju.management.domain.todo.controller;
 
-import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import com.mju.management.domain.todo.dto.ToDoRequestDto;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.domain.todo.service.ToDoService;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
-import com.netflix.discovery.converters.Auto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
