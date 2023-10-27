@@ -26,16 +26,8 @@ public class UserServiceImpl {
 
     private final UserFeignClient userFeignClient;
 
-    public List<GetProjectUserResponseDto> getProjectUserResponseDtoList(List<ProjectUser> projectUserList) {
-        List<GetProjectUserResponseDto> getProjectUserResponseDtoList = new ArrayList<>();
-            for(ProjectUser projectUser : projectUserList){
-                GetUserResponseDto getUserResponseDto = null;
-                try{getUserResponseDto = userFeignClient.getUser(projectUser.getUserId()).getBody();}
-                catch (Exception e){e.printStackTrace(); continue;}
-                GetProjectUserResponseDto getProjectUserResponseDto =
-                        GetProjectUserResponseDto.from(getUserResponseDto, projectUser.getRole());
-                getProjectUserResponseDtoList.add(getProjectUserResponseDto);
-            }
-        return getProjectUserResponseDtoList;
+    public GetUserResponseDto getUser(Long userId){
+        try{return userFeignClient.getUser(userId).getBody();}
+        catch (Exception e){e.printStackTrace(); return null;}
     }
 }

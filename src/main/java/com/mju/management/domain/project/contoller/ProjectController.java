@@ -5,7 +5,7 @@ import com.mju.management.domain.project.dto.response.GetProjectResponseDto;
 import com.mju.management.domain.project.service.ProjectService;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
-import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
+import com.mju.management.domain.project.dto.reqeust.CreateProjectRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,8 +26,8 @@ public class ProjectController {
     //프로젝트 등록
     @Operation(summary = "프로젝트 생성")
     @PostMapping()
-    public CommonResult registerProject(@Valid @RequestBody ProjectRegisterRequestDto projectRegisterRequestDto) {
-        projectService.registerProject(projectRegisterRequestDto);
+    public CommonResult createProject(@Valid @RequestBody CreateProjectRequestDto createProjectRequestDto) {
+        projectService.createProject(createProjectRequestDto);
         return responseService.getSuccessfulResult();
     }
     //프로젝트 전체 조회
@@ -57,7 +57,7 @@ public class ProjectController {
     @Operation(summary = "프로젝트 수정")
     @PutMapping("/{projectId}")
     public CommonResult updateProject(@PathVariable Long projectId,
-                                      @Valid @RequestBody ProjectRegisterRequestDto projectUpdateRequestDto){
+                                      @Valid @RequestBody CreateProjectRequestDto projectUpdateRequestDto){
         projectService.updateProject(projectId, projectUpdateRequestDto);
         return responseService.getSuccessfulResult();
     }

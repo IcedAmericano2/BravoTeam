@@ -1,7 +1,7 @@
 package com.mju.management.domain.project.infrastructure;
 
 import com.mju.management.domain.post.domain.Post;
-import com.mju.management.domain.project.dto.reqeust.ProjectRegisterRequestDto;
+import com.mju.management.domain.project.dto.reqeust.CreateProjectRequestDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import jakarta.persistence.*;
@@ -70,7 +70,7 @@ public class Project {
         post.setProject(this);
     }
 
-    public void update(ProjectRegisterRequestDto projectUpdateRequestDto){
+    public void update(CreateProjectRequestDto projectUpdateRequestDto){
         this.name = projectUpdateRequestDto.getName();
         this.description = projectUpdateRequestDto.getDescription();
         this.startDate = projectUpdateRequestDto.startDateAsLocalDateType();
@@ -98,8 +98,7 @@ public class Project {
 
     public boolean isLeaderOrMember(Long userId){
         for(ProjectUser projectUser : projectUserList)
-            if(projectUser.getUserId() == userId)
-                return true;
+            if(projectUser.getUserId() == userId) return true;
         return  false;
     }
 }

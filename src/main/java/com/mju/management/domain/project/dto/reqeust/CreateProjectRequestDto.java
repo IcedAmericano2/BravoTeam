@@ -5,22 +5,19 @@ import com.mju.management.global.model.Exception.ExceptionList;
 import com.mju.management.global.model.Exception.InvalidDateFormatException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectRegisterRequestDto {
+public class CreateProjectRequestDto {
 
     @NotBlank(message = "포르젝트명을 입력해주세요.")
     @Size(max = 255, message = "255자 이하로 입력해주세요.")
