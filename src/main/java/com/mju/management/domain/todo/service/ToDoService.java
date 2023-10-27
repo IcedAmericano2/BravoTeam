@@ -1,6 +1,5 @@
 package com.mju.management.domain.todo.service;
 
-import com.mju.management.domain.todo.dto.ToDoRegisterDto;
 import com.mju.management.domain.todo.infrastructure.ToDoEntity;
 import com.mju.management.domain.todo.dto.ToDoRequestDto;
 
