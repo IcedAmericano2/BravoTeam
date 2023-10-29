@@ -33,13 +33,13 @@ public class PostResponse {
     @Schema(description = "댓글 갯수")
     private long commentSum;
 
-    public static PostResponse from(Post post){
+    public static PostResponse from(Post post, String userName){
 
         return PostResponse.builder()
                 .id(post.getId())
 //                .status()
                 .title(post.getTitle())
-//                .userName()
+                .userName(userName)
                 .startDate(post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss")))
                 .commentSum(post.getCommentList().size())
                 .build();
