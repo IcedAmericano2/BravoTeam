@@ -70,7 +70,7 @@ public class PostServiceImpl {
         }
 
         Post post = optionalPost.get();
-        return responseService.getSingleResult(PostDetailResponse.from(post, getUsername(post.getWriterId())));
+        return responseService.getSingleResult(PostDetailResponse.from(post, userService.getUsername(post.getWriterId())));
     }
 
     public CommonResult updatePost(UpdatePostRequestServiceDto dto) {
@@ -128,10 +128,6 @@ public class PostServiceImpl {
             throw new UnauthorizedAccessException(ExceptionList.UNAUTHORIZED_ACCESS);
     }
 
-    private String getUsername(Long userId){
-        GetUserResponseDto getUserResponseDto = userService.getUser(userId);
-        if(getUserResponseDto == null) return "(알 수 없음)";
-        return getUserResponseDto.getName();
-    }
+
 
 }

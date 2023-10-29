@@ -2,6 +2,7 @@ package com.mju.management.domain.post.controller;
 
 import com.mju.management.domain.post.controller.port.PostReadService;
 import com.mju.management.domain.post.controller.response.PostResponse;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,8 +26,8 @@ public class PostReadController {
     @Operation(summary = "기획/제작/편집 게시글 전체 조회 API (category : PLANNING, PRODUCTION, EDITING)")
     @GetMapping("/{projectId}/posts/all")
     public CommonResult readAll(@RequestParam("category") String category,
-            /* @AuthenticationPrincipal User user */@PathVariable Long projectId){
-        long userId = 1L;
+                                @PathVariable Long projectId){
+        Long userId = JwtContextHolder.getUserId();
         List<PostResponse> responseList = postReadService.readAll(projectId, userId, category);
         return responseService.getListResult(responseList);
     }
@@ -34,9 +35,8 @@ public class PostReadController {
     @Operation(summary = "기획/제작/편집 게시글 상위 3개 조회 API (category : PLANNING, PRODUCTION, EDITING)")
     @GetMapping("/{projectId}/posts/recent")
     public CommonResult readThree(@PathVariable Long projectId,
-                                  @RequestParam("category") String category
-            /* @AuthenticationPrincipal User user */){
-        long userId = 1L;
+                                  @RequestParam("category") String category){
+        Long userId = JwtContextHolder.getUserId();
         List<PostResponse> responseList = postReadService.readThree(projectId, userId, category);
         return responseService.getListResult(responseList);
     }
