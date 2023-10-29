@@ -30,4 +30,10 @@ public class UserServiceImpl {
         try{return userFeignClient.getUser(userId).getBody();}
         catch (Exception e){e.printStackTrace(); return null;}
     }
+
+    public String getUsername(Long userId){
+        GetUserResponseDto getUserResponseDto = getUser(userId);
+        if(getUserResponseDto == null) return "(알 수 없음)";
+        return getUserResponseDto.getName();
+    }
 }
