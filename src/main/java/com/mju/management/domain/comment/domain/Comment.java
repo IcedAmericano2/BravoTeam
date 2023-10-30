@@ -1,6 +1,7 @@
 package com.mju.management.domain.comment.domain;
 
 import com.mju.management.domain.post.domain.Post;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,14 +14,16 @@ public class Comment {
     private final String content;
     private final Post post;
     private final LocalDateTime updatedAt;
+    private final Long writeId;
 
     @Builder
-    public Comment(Long id, LocalDateTime createdAt, String content, Post post, LocalDateTime updatedAt) {
+    public Comment(Long id, LocalDateTime createdAt, String content, Post post, LocalDateTime updatedAt, Long writeId) {
         this.id = id;
         this.createdAt = createdAt;
         this.content = content;
         this.post = post;
         this.updatedAt = updatedAt;
+        this.writeId = writeId;
     }
 
     public static Comment from(Post post, CommentCreate commentCreate) {
@@ -29,6 +32,7 @@ public class Comment {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
                 .post(post)
+                .writeId(JwtContextHolder.getUserId())
                 .build();
     }
 
@@ -39,6 +43,7 @@ public class Comment {
                 .updatedAt(LocalDateTime.now())
                 .content(commentUpdate.getContent())
                 .post(post)
+                .writeId(writeId)
                 .build();
     }
 
