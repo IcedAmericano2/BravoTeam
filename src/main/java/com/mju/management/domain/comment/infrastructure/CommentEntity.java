@@ -5,7 +5,6 @@ import com.mju.management.domain.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +30,8 @@ public class CommentEntity {
     @JoinColumn(name = "post_index")
     private Post post;
 
+    private Long writeId;
+
     public static CommentEntity from(Comment comment) {
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.id = comment.getId();
@@ -38,6 +39,7 @@ public class CommentEntity {
         commentEntity.createdAt = comment.getCreatedAt();
         commentEntity.post = comment.getPost();
         commentEntity.updatedAt = comment.getUpdatedAt();
+        commentEntity.writeId = commentEntity.getWriteId();
         return commentEntity;
     }
 
@@ -48,8 +50,8 @@ public class CommentEntity {
                 .updatedAt(updatedAt)
                 .content(content)
                 .post(post)
+                .writeId(writeId)
                 .build();
     }
 
-    /** 유저 추가 */
 }
