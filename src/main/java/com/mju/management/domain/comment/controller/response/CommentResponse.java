@@ -1,6 +1,7 @@
 package com.mju.management.domain.comment.controller.response;
 
 import com.mju.management.domain.comment.domain.Comment;
+import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,8 +29,8 @@ public class CommentResponse {
     @Schema(description = "수정 시간 (2023.09.16 11:11)")
     private String updatedAt;
 
-//    @Schema(description = "댓글 작성자")
-//    private String userName;
+    @Schema(description = "댓글 작성자")
+    private String userName;
 
 
     public static String changDateFormat(LocalDateTime dateTime){
@@ -43,6 +44,7 @@ public class CommentResponse {
                 .updatedAt(comment.getUpdatedAt() == null ? null : changDateFormat(comment.getUpdatedAt()))
                 .content(comment.getContent())
                 .postId(comment.getPost().getId())
+                .userName(JwtContextHolder.getUsername())
                 .build();
     }
 
