@@ -39,7 +39,7 @@ public class CommentEntity {
         commentEntity.createdAt = comment.getCreatedAt();
         commentEntity.post = comment.getPost();
         commentEntity.updatedAt = comment.getUpdatedAt();
-        commentEntity.writeId = commentEntity.getWriteId();
+        commentEntity.writeId = comment.getWriteId();
         return commentEntity;
     }
 

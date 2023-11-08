@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         // 요청자가 해당 프로젝트의 팀원인지 확인
         checkMemberAuthorization(post.getProject(), JwtContextHolder.getUserId());
 
-        Comment comment = Comment.from(post, commentCreate);
+        Comment comment = Comment.from(post, commentCreate, JwtContextHolder.getUserId());
         return commentRepository.save(comment);
     }
 
