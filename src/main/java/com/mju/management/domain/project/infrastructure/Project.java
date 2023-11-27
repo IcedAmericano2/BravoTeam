@@ -81,6 +81,13 @@ public class Project {
         this.isChecked = true;
     }
 
+    public Long getLeaderId(){
+        for (ProjectUser projectUser : projectUserList)
+            if(projectUser.getRole() == Role.LEADER)
+                return projectUser.getUserId();
+        return null;
+    }
+
     public Set<Long> getMemberIdList(){
         Set<Long> memberIdList = new HashSet<>();
         for (ProjectUser projectUser : projectUserList)
@@ -92,6 +99,13 @@ public class Project {
     public boolean isLeader(Long userId) {
         for(ProjectUser projectUser : projectUserList)
             if(projectUser.getUserId()==userId && projectUser.getRole()==Role.LEADER)
+                return true;
+        return  false;
+    }
+
+    public boolean isMember(Long userId) {
+        for(ProjectUser projectUser : projectUserList)
+            if(projectUser.getUserId()==userId && projectUser.getRole()==Role.MEMBER)
                 return true;
         return  false;
     }

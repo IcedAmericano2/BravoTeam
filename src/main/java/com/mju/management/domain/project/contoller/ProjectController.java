@@ -71,7 +71,7 @@ public class ProjectController {
     //프로젝트 완료 표시
     @Operation(summary = "프로젝트 완료 표시")
     @PutMapping("/{projectId}/finish")
-    public CommonResult finishCheckList(@PathVariable Long projectId){
+    public CommonResult finishProject(@PathVariable Long projectId){
         projectService.finishProject(projectId);
         return responseService.getSuccessfulResult();
     }

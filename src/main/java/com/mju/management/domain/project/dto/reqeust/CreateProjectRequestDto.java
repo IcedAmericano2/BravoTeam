@@ -17,6 +17,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CreateProjectRequestDto {
 
     @NotBlank(message = "포르젝트명을 입력해주세요.")
@@ -38,7 +39,7 @@ public class CreateProjectRequestDto {
     private String finishDate;
 
     @Schema(description = "프로젝트 팀원 아이디 목록", defaultValue = "[2, 3, 4]")
-    private Set<Long> memberIdList = new HashSet<Long>();
+    private Set<Long> memberIdList = new HashSet<>();
 
     public Project toEntity(){
         return Project.builder()
