@@ -56,6 +56,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'javax.xml.bind:jaxb-api:2.3.0'
 
+	// test container
+	testImplementation "org.testcontainers:junit-jupiter:1.17.2"
+	testImplementation "org.testcontainers:mysql:1.17.2"
 
 }
 

@@ -12,6 +12,7 @@ import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.net.HttpCookie;
@@ -26,7 +27,10 @@ public class UserServiceImpl {
 
     private final UserFeignClient userFeignClient;
 
+    private final Environment environment;
+
     public GetUserResponseDto getUser(Long userId){
+        if("test".equals(environment.getActiveProfiles()[0])) return getMockResult(userId);
         try{return userFeignClient.getUser(userId).getBody();}
         catch (Exception e){e.printStackTrace(); return null;}
     }
@@ -35,5 +39,16 @@ public class UserServiceImpl {
         GetUserResponseDto getUserResponseDto = getUser(userId);
         if(getUserResponseDto == null) return "(알 수 없음)";
         return getUserResponseDto.getName();
+    }
+
+    private GetUserResponseDto getMockResult(Long userId) {
+        String test = "test" + userId;
+        return GetUserResponseDto.builder()
+                .id(userId)
+                .name(test)
+                .email(test)
+                .phoneNumber(test)
+                .isApproved(true)
+                .build();
     }
 }
