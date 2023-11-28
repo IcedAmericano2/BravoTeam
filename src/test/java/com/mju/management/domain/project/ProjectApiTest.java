@@ -1,28 +1,17 @@
-package com.mju.management.domain.project.controller;
+package com.mju.management.domain.project;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mju.management.BaseApiTest;
 import com.mju.management.domain.project.dto.reqeust.CreateProjectRequestDto;
 import com.mju.management.domain.project.infrastructure.*;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcConfigurerAdapter;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -33,20 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@Testcontainers
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ProjectControllerTest {
-    @Autowired
-    protected MockMvc mockMvc;
-    @Autowired
-    protected ObjectMapper objectMapper;
-    @Autowired
-    private WebApplicationContext context;
+public class ProjectApiTest extends BaseApiTest {
+
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
@@ -91,17 +69,11 @@ public class ProjectControllerTest {
         return project.getProjectId();
     }
 
-    @BeforeEach
-    public void setUp() {
-        // set up mockMvc
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .build();
-    }
-
     @AfterEach
     public void tearDown() {
         // delete all Project
         projectRepository.deleteAll();
+        JwtContextHolder.clear();
     }
 
     @DisplayName("프로젝트 생성을 성공한다.")
@@ -282,7 +254,7 @@ public class ProjectControllerTest {
 
     @DisplayName("프로젝트 완료를 성공한다.")
     @Test
-    public void finishProject() throws Exception {
+    public void finishProject_Success() throws Exception {
         //given
         JwtContextHolder.setUserId(userId);
 
