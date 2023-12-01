@@ -486,4 +486,61 @@ public class ScheduleApiTest extends BaseApiTest {
         //then
         result.andExpect(jsonPath("$.code").value(6004));
     }
+
+    @DisplayName("일정 삭제 성공")
+    @Test
+    public void deleteSchedule_Success() throws Exception {
+        //given
+        JwtContextHolder.setUserId(leaderId);
+
+        Project project = createProject(leaderId);
+
+        Schedule schedule =  creatSchedule(project);
+
+        String url = "/api/schedules/{scheduleId}";
+
+        //when
+        ResultActions result = mockMvc.perform(delete(url, schedule.getScheduleId())
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(200));
+        assertThat(scheduleRepository.findById(schedule.getScheduleId()).isEmpty()).isTrue();
+    }
+
+    @DisplayName("일정 삭제 실패: 일정이 존재하지 않음")
+    @Test
+    public void deleteSchedule_Fail_NonExistentSchedule() throws Exception {
+        //given
+        JwtContextHolder.setUserId(leaderId);
+
+        String url = "/api/schedules/{scheduleId}";
+
+        //when
+        ResultActions result = mockMvc.perform(delete(url, 1)
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(6000));
+    }
+
+    @DisplayName("일정 삭제 실패: 요청자가 프로젝트 소속이 아님")
+    @Test
+    public void deleteSchedule_Fail_UnauthorizedAccess() throws Exception {
+        //given
+        JwtContextHolder.setUserId(outsiderId);
+
+        Project project = createProject(leaderId);
+
+        Schedule schedule =  creatSchedule(project);
+
+        String url = "/api/schedules/{scheduleId}";
+
+        //when
+        ResultActions result = mockMvc.perform(delete(url, schedule.getScheduleId())
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(8000));
+    }
 }
