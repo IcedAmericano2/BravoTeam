@@ -7,15 +7,18 @@ import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
 import com.mju.management.domain.schedule.infrastructure.Schedule;
 import com.mju.management.domain.schedule.infrastructure.ScheduleRepository;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -175,5 +178,93 @@ public class ScheduleApiTest extends BaseApiTest {
         //then
         result.andExpect(jsonPath("$.code").value(6004));
         assertThat(scheduleRepository.findAll()).isEmpty();
+    }
+
+    @DisplayName("프로젝트의 일정 목록 조회 성공")
+    @Test
+    public void getScheduleList_Success() throws Exception {
+        //given
+        JwtContextHolder.setUserId(leaderId);
+
+        Project project = createProject(leaderId);
+
+        int count = 10;
+        for(int i = 0; i < count; i++) creatSchedule(project);
+
+        String url = "/api/projects/{projectId}/schedules";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url, project.getProjectId())
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.list").value(Matchers.hasSize(count)));
+    }
+
+    @DisplayName("프로젝트의 일정 목록 조회 실패: 프로젝트가 존재하지 않음")
+    @Test
+    public void getScheduleList_Fail_NonExistentProject() throws Exception {
+        //given
+        JwtContextHolder.setUserId(leaderId);
+
+        String url = "/api/projects/{projectId}/schedules";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url, 1)
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(5008));
+    }
+
+    @DisplayName("프로젝트의 일정 목록 조회 실패: 요청자가 프로젝트 소속이 아님")
+    @Test
+    public void getScheduleList_Fail_UnauthorizedAccess() throws Exception {
+        //given
+        JwtContextHolder.setUserId(outsiderId);
+
+        Project project = createProject(leaderId);
+
+        int count = 10;
+        for(int i = 0; i < count; i++) creatSchedule(project);
+
+        String url = "/api/projects/{projectId}/schedules";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url, project.getProjectId())
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(8000));
+    }
+
+    @DisplayName("프로젝트의 일정 목록 조회 실패: 일정이 존재하지 않음")
+    @Test
+    public void getScheduleList_Fail_NonExistentSchedule() throws Exception {
+        //given
+        JwtContextHolder.setUserId(leaderId);
+
+        Project project = createProject(leaderId);
+
+        String url = "/api/projects/{projectId}/schedules";
+
+        //when
+        ResultActions result = mockMvc.perform(get(url, project.getProjectId())
+                .accept(APPLICATION_JSON_VALUE));
+
+        //then
+        result.andExpect(jsonPath("$.code").value(6001));
+    }
+
+    private Schedule creatSchedule(Project project){
+        return scheduleRepository.save(Schedule
+                .builder()
+                .project(project)
+                .content(scheduleContent)
+                .startDate(LocalDate.parse(scheduleStartDate))
+                .endDate(LocalDate.parse(scheduleEndDate))
+                .build()
+        );
     }
 }
