@@ -1,19 +1,15 @@
 package com.mju.management.domain.project;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mju.management.BaseApiTest;
 import com.mju.management.domain.project.dto.reqeust.CreateProjectRequestDto;
 import com.mju.management.domain.project.infrastructure.*;
 import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,10 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ProjectApiTest extends BaseApiTest {
 
-    @AfterEach
-    public void deleteAllProject() {
-        projectRepository.deleteAll();
-    }
     @DisplayName("프로젝트 생성 성공: 팀원을 초대하지 않는 경우")
     @Test
     public void createProject_Success_No_Invite() throws Exception {
@@ -41,10 +33,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(startDate)
-                .finishDate(finishDate)
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(projectStartDate)
+                .finishDate(projectFinishDate)
                 .memberIdList(memberIdList)
                 .build();
 
@@ -62,10 +54,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         assertThat(projectList.size()).isEqualTo(1);
         Project project = projectList.get(0);
-        assertThat(project.getName()).isEqualTo(name);
-        assertThat(project.getDescription()).isEqualTo(description);
-        assertThat(project.getStartDate()).isEqualTo(startDate);
-        assertThat(project.getFinishDate()).isEqualTo(finishDate);
+        assertThat(project.getName()).isEqualTo(projectName);
+        assertThat(project.getDescription()).isEqualTo(projectDescription);
+        assertThat(project.getStartDate()).isEqualTo(projectStartDate);
+        assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProject(project).size())
                 .isEqualTo(1);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
@@ -85,10 +77,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(startDate)
-                .finishDate(finishDate)
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(projectStartDate)
+                .finishDate(projectFinishDate)
                 .memberIdList(memberIdList)
                 .build();
 
@@ -106,10 +98,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         assertThat(projectList.size()).isEqualTo(1);
         Project project = projectList.get(0);
-        assertThat(project.getName()).isEqualTo(name);
-        assertThat(project.getDescription()).isEqualTo(description);
-        assertThat(project.getStartDate()).isEqualTo(startDate);
-        assertThat(project.getFinishDate()).isEqualTo(finishDate);
+        assertThat(project.getName()).isEqualTo(projectName);
+        assertThat(project.getDescription()).isEqualTo(projectDescription);
+        assertThat(project.getStartDate()).isEqualTo(projectStartDate);
+        assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
                 .isEqualTo(true);
         assertThat(projectUserRepository.findByProjectAndUserId(project, memberId).isPresent())
@@ -129,10 +121,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(startDate)
-                .finishDate(finishDate)
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(projectStartDate)
+                .finishDate(projectFinishDate)
                 .memberIdList(memberIdList)
                 .build();
 
@@ -150,10 +142,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         assertThat(projectList.size()).isEqualTo(1);
         Project project = projectList.get(0);
-        assertThat(project.getName()).isEqualTo(name);
-        assertThat(project.getDescription()).isEqualTo(description);
-        assertThat(project.getStartDate()).isEqualTo(startDate);
-        assertThat(project.getFinishDate()).isEqualTo(finishDate);
+        assertThat(project.getName()).isEqualTo(projectName);
+        assertThat(project.getDescription()).isEqualTo(projectDescription);
+        assertThat(project.getStartDate()).isEqualTo(projectStartDate);
+        assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
                 .isEqualTo(true);
         assertThat(projectUserRepository.findByProjectAndUserId(project, nonExistentUserId).isPresent())
@@ -173,10 +165,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(startDate)
-                .finishDate(finishDate)
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(projectStartDate)
+                .finishDate(projectFinishDate)
                 .memberIdList(memberIdList)
                 .build();
 
@@ -194,10 +186,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         assertThat(projectList.size()).isEqualTo(1);
         Project project = projectList.get(0);
-        assertThat(project.getName()).isEqualTo(name);
-        assertThat(project.getDescription()).isEqualTo(description);
-        assertThat(project.getStartDate()).isEqualTo(startDate);
-        assertThat(project.getFinishDate()).isEqualTo(finishDate);
+        assertThat(project.getName()).isEqualTo(projectName);
+        assertThat(project.getDescription()).isEqualTo(projectDescription);
+        assertThat(project.getStartDate()).isEqualTo(projectStartDate);
+        assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
                 .isEqualTo(true);
         assertThat(projectUserRepository.findByProjectAndUserId(project, serverErrorUserId).isPresent())
@@ -217,10 +209,10 @@ public class ProjectApiTest extends BaseApiTest {
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(finishDate)
-                .finishDate(startDate)
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(projectFinishDate)
+                .finishDate(projectStartDate)
                 .memberIdList(memberIdList)
                 .build();
 
@@ -324,10 +316,10 @@ public class ProjectApiTest extends BaseApiTest {
         //then
         result.andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.projectId").value(project.getProjectId()))
-                .andExpect(jsonPath("$.data.name").value(name))
-                .andExpect(jsonPath("$.data.description").value(description))
-                .andExpect(jsonPath("$.data.startDate").value(startDate))
-                .andExpect(jsonPath("$.data.finishDate").value(finishDate))
+                .andExpect(jsonPath("$.data.name").value(projectName))
+                .andExpect(jsonPath("$.data.description").value(projectDescription))
+                .andExpect(jsonPath("$.data.startDate").value(projectStartDate))
+                .andExpect(jsonPath("$.data.finishDate").value(projectFinishDate))
                 .andExpect(jsonPath("$.data.leaderAndMemberList[0].userId").value(leaderId))
                 .andExpect(jsonPath("$.data.leaderAndMemberList[1].userId").value(memberId));
     }
@@ -350,10 +342,10 @@ public class ProjectApiTest extends BaseApiTest {
         //then
         result.andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.projectId").value(project.getProjectId()))
-                .andExpect(jsonPath("$.data.name").value(name))
-                .andExpect(jsonPath("$.data.description").value(description))
-                .andExpect(jsonPath("$.data.startDate").value(startDate))
-                .andExpect(jsonPath("$.data.finishDate").value(finishDate))
+                .andExpect(jsonPath("$.data.name").value(projectName))
+                .andExpect(jsonPath("$.data.description").value(projectDescription))
+                .andExpect(jsonPath("$.data.startDate").value(projectStartDate))
+                .andExpect(jsonPath("$.data.finishDate").value(projectFinishDate))
                 .andExpect(jsonPath("$.data.leaderAndMemberList[0].userId").value(leaderId))
                 .andExpect(jsonPath("$.data.leaderAndMemberList.length()").value(1));
     }
@@ -375,10 +367,10 @@ public class ProjectApiTest extends BaseApiTest {
         //then
         result.andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data.projectId").value(project.getProjectId()))
-                .andExpect(jsonPath("$.data.name").value(name))
-                .andExpect(jsonPath("$.data.description").value(description))
-                .andExpect(jsonPath("$.data.startDate").value(startDate))
-                .andExpect(jsonPath("$.data.finishDate").value(finishDate))
+                .andExpect(jsonPath("$.data.name").value(projectName))
+                .andExpect(jsonPath("$.data.description").value(projectDescription))
+                .andExpect(jsonPath("$.data.startDate").value(projectStartDate))
+                .andExpect(jsonPath("$.data.finishDate").value(projectFinishDate))
                 .andExpect(jsonPath("$.data.leaderAndMemberList.size()").value(0));
     }
 

@@ -16,6 +16,7 @@ import java.time.format.DateTimeParseException;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CreateScheduleRequestDto {
 
     @NotBlank(message = "내용을 입력해주세요.")

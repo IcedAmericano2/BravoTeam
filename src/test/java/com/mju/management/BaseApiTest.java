@@ -44,14 +44,19 @@ public class BaseApiTest {
         configureWireMock();
     }
 
-    @AfterEach
-    public void clearJwtContext() {
-        JwtContextHolder.clear();
-    }
-
     @AfterAll
     public static void stopWireMockServer() {
         wireMockServer.stop();
+    }
+
+    @AfterEach
+    public void deleteAllProject() {
+        projectRepository.deleteAll();
+    }
+
+    @AfterEach
+    public void clearJwtContext() {
+        JwtContextHolder.clear();
     }
 
     private static void configureWireMock() {
@@ -95,19 +100,19 @@ public class BaseApiTest {
     @Autowired
     protected ProjectUserRepository projectUserRepository;
 
-    protected final String name = "소코아 프로젝트";
-    protected final String description = "소코아 프로젝트입니다.";
-    protected final String startDate = "2023-09-01";
-    protected final String finishDate = "2023-12-15";
+    protected final String projectName = "소코아 프로젝트";
+    protected final String projectDescription = "소코아 프로젝트입니다.";
+    protected final String projectStartDate = "2023-09-01";
+    protected final String projectFinishDate = "2023-12-15";
 
     protected Project createProject(Long leaderId){
         // create Project
         Project project = projectRepository.save(Project
                 .builder()
-                .name(name)
-                .description(description)
-                .startDate(LocalDate.parse(startDate))
-                .finishDate(LocalDate.parse(finishDate))
+                .name(projectName)
+                .description(projectDescription)
+                .startDate(LocalDate.parse(projectStartDate))
+                .finishDate(LocalDate.parse(projectFinishDate))
                 .build()
         );
 
