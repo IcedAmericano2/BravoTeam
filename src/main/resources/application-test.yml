@@ -22,10 +22,8 @@ spring:
 
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: false
+    fetch-registry: false
 
 jwt:
   secret: ENC(acbDZy8Gz9X1OSL3fjOHVg==)
