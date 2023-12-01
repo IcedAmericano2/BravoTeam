@@ -45,7 +45,7 @@ public class ScheduleController {
     //일정 하나 조회
     @Operation(summary = "일정 가져오기", description = "일정을 가져오는 API")
     @ResponseStatus(OK)
-    @GetMapping("schedules/{scheduleId}")
+    @GetMapping("/schedules/{scheduleId}")
     public CommonResult getSchedule(@PathVariable Long scheduleId) {
         GetScheduleResponseDto schedule = scheduleService.getSchedule(scheduleId);
         return responseService.getSingleResult(schedule);
@@ -54,7 +54,7 @@ public class ScheduleController {
     //일정 수정
     @Operation(summary = "일정 수정하기", description = "일정을 수정하는 API")
     @ResponseStatus(OK)
-    @PutMapping("schedules/{scheduleId}")
+    @PutMapping("/schedules/{scheduleId}")
     public CommonResult updateSchedule(@PathVariable Long scheduleId, @Valid @RequestBody CreateScheduleRequestDto updateScheduleRequestDto) {
         scheduleService.updateSchedule(scheduleId, updateScheduleRequestDto);
         return responseService.getSuccessfulResult();
@@ -62,7 +62,7 @@ public class ScheduleController {
     //일정 삭제
     @Operation(summary = "일정 삭제하기", description = "일정을 삭제하는 API")
     @ResponseStatus(OK)
-    @DeleteMapping("schedules/{scheduleId}")
+    @DeleteMapping("/schedules/{scheduleId}")
     public CommonResult deleteSchedule(@PathVariable Long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
         return responseService.getSuccessfulResult();
