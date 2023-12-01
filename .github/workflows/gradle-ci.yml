@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report # 결과물의 이름
-          path: build/reports/tests/test/html # upload하고자 하는 파일 또는 디렉토리 경로
+          path: build/reports/tests/test # upload하고자 하는 파일 또는 디렉토리 경로
 
       # 테스트 커버리지 레포트를 깃허브에 업로드
       - name: Upload Jacoco Report
