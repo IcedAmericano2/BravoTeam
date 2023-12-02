@@ -1,6 +1,5 @@
 package com.mju.management.domain.schedule;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mju.management.BaseApiTest;
 import com.mju.management.domain.project.infrastructure.Project;
 import com.mju.management.domain.schedule.dto.reqeust.CreateScheduleRequestDto;
@@ -30,7 +29,7 @@ public class ScheduleApiTest extends BaseApiTest {
     private final String scheduleStartDate = "2023-11-01";
     private final String scheduleEndDate = "2023-11-07";
 
-    private Schedule creatSchedule(Project project){
+    private Schedule createSchedule(Project project){
         return scheduleRepository.save(Schedule
                 .builder()
                 .project(project)
@@ -104,10 +103,10 @@ public class ScheduleApiTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("일정 생성 실패: 요청자가 프로젝트 팀장이 아님")
+    @DisplayName("일정 생성 실패: 요청자가 프로젝트 소속이 아님")
     public void createSchedule_Fail_UnauthorizedAccess() throws Exception {
         //given
-        JwtContextHolder.setUserId(memberId);
+        JwtContextHolder.setUserId(outsiderId);
 
         Project project = createProject(leaderId);
 
@@ -199,7 +198,7 @@ public class ScheduleApiTest extends BaseApiTest {
         Project project = createProject(leaderId);
 
         int count = 10;
-        for(int i = 0; i < count; i++) creatSchedule(project);
+        for(int i = 0; i < count; i++) createSchedule(project);
 
         String url = "/api/projects/{projectId}/schedules";
 
@@ -237,7 +236,7 @@ public class ScheduleApiTest extends BaseApiTest {
         Project project = createProject(leaderId);
 
         int count = 10;
-        for(int i = 0; i < count; i++) creatSchedule(project);
+        for(int i = 0; i < count; i++) createSchedule(project);
 
         String url = "/api/projects/{projectId}/schedules";
 
@@ -275,7 +274,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         Project project = createProject(leaderId);
 
-        Schedule schedule =  creatSchedule(project);
+        Schedule schedule =  createSchedule(project);
 
         String url = "/api/schedules/{scheduleId}";
 
@@ -317,7 +316,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         Project project = createProject(leaderId);
 
-        Schedule schedule =  creatSchedule(project);
+        Schedule schedule =  createSchedule(project);
 
         String url = "/api/schedules/{scheduleId}";
 
@@ -339,7 +338,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         JwtContextHolder.setUserId(leaderId);
 
-        Schedule schedule = creatSchedule(createProject(leaderId));
+        Schedule schedule = createSchedule(createProject(leaderId));
 
         CreateScheduleRequestDto updateScheduleRequestDto = CreateScheduleRequestDto
                 .builder()
@@ -404,7 +403,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         JwtContextHolder.setUserId(outsiderId);
 
-        Schedule schedule = creatSchedule(createProject(leaderId));
+        Schedule schedule = createSchedule(createProject(leaderId));
 
         CreateScheduleRequestDto updateScheduleRequestDto = CreateScheduleRequestDto
                 .builder()
@@ -435,7 +434,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         JwtContextHolder.setUserId(leaderId);
 
-        Schedule schedule = creatSchedule(createProject(leaderId));
+        Schedule schedule = createSchedule(createProject(leaderId));
 
         CreateScheduleRequestDto updateScheduleRequestDto = CreateScheduleRequestDto
                 .builder()
@@ -466,7 +465,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         JwtContextHolder.setUserId(leaderId);
 
-        Schedule schedule = creatSchedule(createProject(leaderId));
+        Schedule schedule = createSchedule(createProject(leaderId));
 
         CreateScheduleRequestDto updateScheduleRequestDto = CreateScheduleRequestDto
                 .builder()
@@ -495,7 +494,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         Project project = createProject(leaderId);
 
-        Schedule schedule =  creatSchedule(project);
+        Schedule schedule =  createSchedule(project);
 
         String url = "/api/schedules/{scheduleId}";
 
@@ -532,7 +531,7 @@ public class ScheduleApiTest extends BaseApiTest {
 
         Project project = createProject(leaderId);
 
-        Schedule schedule =  creatSchedule(project);
+        Schedule schedule =  createSchedule(project);
 
         String url = "/api/schedules/{scheduleId}";
 
