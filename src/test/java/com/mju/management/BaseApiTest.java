@@ -34,14 +34,16 @@ public class BaseApiTest {
     protected static final Long leaderId = 1L;
     protected static final Long memberId = 2L;
     protected static final Long outsiderId = 3L;
-    protected static final Long nonExistentUserId = 4L;
-    protected static final Long serverErrorUserId = 5L;
+
+    public enum UserServiceState{
+        NORMAL, NON_EXISTENT_USER, INTERNAL_SERVER_ERROR, TIME_OUT_ERROR
+    }
+
 
     @BeforeAll
     public static void startWireMockServer() {
         wireMockServer = new WireMockServer(port);
         wireMockServer.start();
-        configureWireMock();
     }
 
     @AfterAll
@@ -59,39 +61,43 @@ public class BaseApiTest {
         JwtContextHolder.clear();
     }
 
-    private static void configureWireMock() {
-        configureWireMockByUserId(leaderId);
-        configureWireMockByUserId(memberId);
-        configureWireMockByUserId(outsiderId);
-
-        // 유저가 존재하지 않는 경우 응답 정의
-        wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + nonExistentUserId))
-                .willReturn(aResponse()
-                        .withStatus(500)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{ \"error\": \"User not found\" }")));
-
-        // 서버 장애로 실패하는 경우 응답 정의
-        wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + serverErrorUserId))
-                .willReturn(aResponse()
-                        .withStatus(500)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{ \"error\": \"Internal Server Error\" }")));
+    @AfterEach
+    public void resetWireMockServer() {
+        wireMockServer.resetAll();
     }
 
-    private static void configureWireMockByUserId(Long userId) {
-        // 성공하는 경우 응답 정의
-        wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{ " +
-                                "\"id\": " + userId + ", " +
-                                "\"email\": " + "\"test" + userId + "\"" + ", " +
-                                "\"name\": " + "\"test" + userId + "\"" + ", " +
-                                "\"phoneNumber\": " + "\"test" + userId + "\"" + ", " +
-                                "\"isApproved\": true " +
-                                "}")));
+    protected void setUserServiceState(UserServiceState userServiceState, Long userId) {
+        if(userServiceState == UserServiceState.NORMAL)
+            wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
+                    .willReturn(aResponse()
+                            .withStatus(200)
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("{ " +
+                                    "\"id\": " + userId + ", " +
+                                    "\"email\": " + "\"test" + userId + "\"" + ", " +
+                                    "\"name\": " + "\"test" + userId + "\"" + ", " +
+                                    "\"phoneNumber\": " + "\"test" + userId + "\"" + ", " +
+                                    "\"isApproved\": true " +
+                                    "}")));
+        if(userServiceState == UserServiceState.NON_EXISTENT_USER)
+            wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
+                    .willReturn(aResponse()
+                            .withStatus(500)
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("{ \"error\": \"User not found\" }")));
+        if(userServiceState == UserServiceState.INTERNAL_SERVER_ERROR)
+            wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
+                    .willReturn(aResponse()
+                            .withStatus(500)
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("{ \"error\": \"Internal Server Error\" }")));
+        if(userServiceState == UserServiceState.TIME_OUT_ERROR)
+            wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
+                    .willReturn(aResponse()
+                            .withStatus(500)
+                            .withFixedDelay(6000)
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("{ \"error\": \"Internal Server Error\" }")));
     }
 
     @Autowired

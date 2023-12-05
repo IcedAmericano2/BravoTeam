@@ -86,6 +86,8 @@ public class ProjectApiTest extends BaseApiTest {
 
         String requestBody = objectMapper.writeValueAsString(createProjectRequestDto);
 
+        setUserServiceState(UserServiceState.NORMAL, memberId);
+
         //when
         ResultActions result = mockMvc.perform(post(url)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -117,7 +119,7 @@ public class ProjectApiTest extends BaseApiTest {
         String url = "/api/projects";
 
         Set<Long> memberIdList = new HashSet<>();
-        memberIdList.add(nonExistentUserId);
+        memberIdList.add(memberId);
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
@@ -129,6 +131,8 @@ public class ProjectApiTest extends BaseApiTest {
                 .build();
 
         String requestBody = objectMapper.writeValueAsString(createProjectRequestDto);
+
+        setUserServiceState(UserServiceState.NON_EXISTENT_USER, memberId);
 
         //when
         ResultActions result = mockMvc.perform(post(url)
@@ -148,7 +152,7 @@ public class ProjectApiTest extends BaseApiTest {
         assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
                 .isEqualTo(true);
-        assertThat(projectUserRepository.findByProjectAndUserId(project, nonExistentUserId).isPresent())
+        assertThat(projectUserRepository.findByProjectAndUserId(project, memberId).isPresent())
                 .isEqualTo(false);
     }
 
@@ -161,7 +165,7 @@ public class ProjectApiTest extends BaseApiTest {
         String url = "/api/projects";
 
         Set<Long> memberIdList = new HashSet<>();
-        memberIdList.add(serverErrorUserId);
+        memberIdList.add(memberId);
 
         CreateProjectRequestDto createProjectRequestDto = CreateProjectRequestDto
                 .builder()
@@ -173,6 +177,8 @@ public class ProjectApiTest extends BaseApiTest {
                 .build();
 
         String requestBody = objectMapper.writeValueAsString(createProjectRequestDto);
+
+        setUserServiceState(UserServiceState.INTERNAL_SERVER_ERROR, memberId);
 
         //when
         ResultActions result = mockMvc.perform(post(url)
@@ -192,7 +198,7 @@ public class ProjectApiTest extends BaseApiTest {
         assertThat(project.getFinishDate()).isEqualTo(projectFinishDate);
         assertThat(projectUserRepository.findByProjectAndUserId(project, leaderId).isPresent())
                 .isEqualTo(true);
-        assertThat(projectUserRepository.findByProjectAndUserId(project, serverErrorUserId).isPresent())
+        assertThat(projectUserRepository.findByProjectAndUserId(project, memberId).isPresent())
                 .isEqualTo(false);
     }
 
@@ -309,6 +315,9 @@ public class ProjectApiTest extends BaseApiTest {
 
         String url = "/api/projects/{projectId}";
 
+        setUserServiceState(UserServiceState.NORMAL, leaderId);
+        setUserServiceState(UserServiceState.NORMAL, memberId);
+
         //when
         ResultActions result = mockMvc.perform(get(url, project.getProjectId())
                 .accept(APPLICATION_JSON_VALUE));
@@ -331,9 +340,12 @@ public class ProjectApiTest extends BaseApiTest {
         JwtContextHolder.setUserId(leaderId);
 
         Project project = createProject(leaderId);
-        createProjectUser(nonExistentUserId, project);
+        createProjectUser(memberId, project);
 
         String url = "/api/projects/{projectId}";
+
+        setUserServiceState(UserServiceState.NORMAL, leaderId);
+        setUserServiceState(UserServiceState.NON_EXISTENT_USER, memberId);
 
         //when
         ResultActions result = mockMvc.perform(get(url, project.getProjectId())
@@ -354,11 +366,13 @@ public class ProjectApiTest extends BaseApiTest {
     @Test
     public void getProject_Success_UserServiceError() throws Exception {
         //given
-        JwtContextHolder.setUserId(serverErrorUserId);
+        JwtContextHolder.setUserId(leaderId);
 
-        Project project = createProject(serverErrorUserId);
+        Project project = createProject(leaderId);
 
         String url = "/api/projects/{projectId}";
+
+        setUserServiceState(UserServiceState.INTERNAL_SERVER_ERROR, leaderId);
 
         //when
         ResultActions result = mockMvc.perform(get(url, project.getProjectId())
@@ -436,6 +450,8 @@ public class ProjectApiTest extends BaseApiTest {
                 .finishDate(finishDate)
                 .memberIdList(memberIdList)
                 .build();
+
+        setUserServiceState(UserServiceState.NORMAL, outsiderId);
 
         //when
         ResultActions result = mockMvc.perform(put(url, projectId)
