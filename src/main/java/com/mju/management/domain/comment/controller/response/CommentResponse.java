@@ -1,7 +1,6 @@
 package com.mju.management.domain.comment.controller.response;
 
 import com.mju.management.domain.comment.domain.Comment;
-import com.mju.management.global.config.jwtInterceptor.JwtContextHolder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,23 +36,15 @@ public class CommentResponse {
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm:ss"));
     }
 
-    public static CommentResponse from(Comment comment){
+    public static CommentResponse from(Comment comment, String username){
         return CommentResponse.builder()
                 .id(comment.getId())
                 .createdAt(changDateFormat(comment.getCreatedAt()))
                 .updatedAt(comment.getUpdatedAt() == null ? null : changDateFormat(comment.getUpdatedAt()))
                 .content(comment.getContent())
+                .userName(username)
                 .postId(comment.getPost().getId())
-                .userName(JwtContextHolder.getUsername())
                 .build();
-    }
-
-    public static List<CommentResponse> fromList(List<Comment> comments){
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        comments.forEach(comment -> {
-            commentResponses.add(CommentResponse.from(comment));
-        });
-        return commentResponses;
     }
 
 }

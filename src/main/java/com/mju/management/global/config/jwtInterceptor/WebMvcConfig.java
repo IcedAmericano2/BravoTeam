@@ -15,7 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final Environment environment;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if(!"test".equals(environment.getActiveProfiles()[0]))
+        String[] activeProfiles = environment.getActiveProfiles();
+        if(activeProfiles != null && activeProfiles.length > 0 && !activeProfiles[0].equals("test"))
             registry.addInterceptor(jwtInterceptor).addPathPatterns("/api/**");
     }
 }

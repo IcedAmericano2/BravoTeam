@@ -2,9 +2,11 @@ package com.mju.management.domain.comment.infrastructure;
 
 import com.mju.management.domain.comment.domain.Comment;
 import com.mju.management.domain.comment.service.port.CommentRepository;
+import com.mju.management.domain.post.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,5 +28,18 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public void delete(Comment comment) {
         commentJpaRepository.delete(CommentEntity.from(comment));
+    }
+
+    @Override
+    public void deleteAll(Post post) {
+//        List<Comment> commentList = commentJpaRepository.findByPost(post);
+//        for(CommentEntity comment : commentList){
+//
+//        }
+    }
+
+
+    public List<Comment> findByPost(Post post){
+        return null;
     }
 }

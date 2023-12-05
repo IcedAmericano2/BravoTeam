@@ -4,6 +4,7 @@ import static com.mju.management.global.model.Exception.ExceptionList.*;
 
 import java.util.Optional;
 
+import com.mju.management.domain.comment.service.port.CommentRepository;
 import com.mju.management.domain.post.controller.response.PostDetailResponse;
 import com.mju.management.domain.post.domain.Post;
 import com.mju.management.domain.post.infrastructure.PostRepository;
@@ -119,9 +120,15 @@ public class PostServiceImpl {
             return responseService.getFailResult(NO_PERMISSION_TO_EDIT_POST.getCode(), NO_PERMISSION_TO_EDIT_POST.getMessage());
         }
 
+        // 댓글들 삭제
+        commentRepository.deleteAll(post);
+
+
         postRepository.delete(post);
         return responseService.getSuccessfulResultWithMessage("기획/제작/편집 게시글 삭제에 성공하였습니다.");
     }
+
+    private static CommentRepository commentRepository;
 
     private void checkMemberAuthorization(Project project, Long userId){
         if(!project.isLeaderOrMember(userId))
