@@ -95,7 +95,7 @@ public class BaseApiTest {
             wireMockServer.stubFor(get(urlEqualTo("/user-service/response_userById/" + userId))
                     .willReturn(aResponse()
                             .withStatus(500)
-                            .withFixedDelay(5000)
+                            .withFixedDelay(6000)
                             .withHeader("Content-Type", "application/json")
                             .withBody("{ \"error\": \"Internal Server Error\" }")));
     }
