@@ -26,13 +26,13 @@ public class Comment {
         this.writeId = writeId;
     }
 
-    public static Comment from(Post post, CommentCreate commentCreate, Long userId) {
+    public static Comment from(Post post, CommentCreate commentCreate) {
         return Comment.builder()
                 .content(commentCreate.getContent())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
                 .post(post)
-                .writeId(userId)
+                .writeId(JwtContextHolder.getUserId())
                 .build();
     }
 

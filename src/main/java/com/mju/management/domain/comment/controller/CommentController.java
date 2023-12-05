@@ -5,6 +5,7 @@ import com.mju.management.domain.comment.controller.response.CommentResponse;
 import com.mju.management.domain.comment.domain.Comment;
 import com.mju.management.domain.comment.domain.CommentCreate;
 import com.mju.management.domain.comment.domain.CommentUpdate;
+import com.mju.management.domain.user.service.UserServiceImpl;
 import com.mju.management.global.model.Result.CommonResult;
 import com.mju.management.global.service.ResponseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "[기획 /제작/ 편집] 댓글 작성, 수정, 삭제, 조회 API")
@@ -25,19 +27,30 @@ public class CommentController {
     private final CommentService commentService;
     private final ResponseService responseService;
 
+    private final UserServiceImpl userService;
+
+    private String getName(long writtenId){
+        return userService.getUsername(writtenId);
+    }
+
     @Operation(summary = "댓글 작성")
     @PostMapping("/posts/{postId}/comment")
     public CommonResult create(@PathVariable Long postId,
                                @Valid @RequestBody CommentCreate commentCreate){
         Comment comment = commentService.create(postId, commentCreate);
-        return responseService.getSingleResult(CommentResponse.from(comment));
+        return responseService.getSingleResult(CommentResponse.from(comment, getName(comment.getWriteId())));
     }
 
     @Operation(summary = "게시글 Id에 따른 댓글 읽기")
     @GetMapping("/posts/{postId}/comments")
     public CommonResult read(@PathVariable Long postId){
         List<Comment> comments = commentService.read(postId);
-        return responseService.getSingleResult(CommentResponse.fromList(comments));
+
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        comments.forEach(comment -> {
+            commentResponses.add(CommentResponse.from(comment, getName(comment.getWriteId())));
+        });
+        return responseService.getSingleResult(commentResponses);
     }
 
     @Operation(summary = "댓글 수정")
@@ -45,7 +58,7 @@ public class CommentController {
     public CommonResult update(@PathVariable Long commentId,
                                @RequestBody CommentUpdate commentUpdate){
         Comment comment = commentService.update(commentId, commentUpdate);
-        return responseService.getSingleResult(CommentResponse.from(comment));
+        return responseService.getSingleResult(CommentResponse.from(comment, getName(comment.getWriteId())));
     }
 
     @Operation(summary = "댓글 삭제")
